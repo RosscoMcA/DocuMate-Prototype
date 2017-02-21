@@ -64,6 +64,6 @@ C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Owi
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.dll
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.pdb
+C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache

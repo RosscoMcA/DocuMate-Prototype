@@ -8,9 +8,14 @@ namespace IntegratedProject3.Models
     /// <summary>
     /// Code First Representation of the Account table, with different criteria of their role in the system
     /// </summary>
-    public class Acccount:ApplicationUser
+    public class Account:ApplicationUser
     {
         public AccountType AccountType { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string Surname { get; set; }
+
     }
     /// <summary>
     /// ENUM Representation of the system 

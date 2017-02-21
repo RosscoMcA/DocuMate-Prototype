@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace IntegratedProject3.Models
+namespace IP3.Data
 {
     /// <summary>
     /// Code first representation of the Document Table of the database.
@@ -22,8 +22,6 @@ namespace IntegratedProject3.Models
         /// Navigational Property for The author
         /// </summary>
         public virtual Account Author { get; set; }
-
-        public virtual ICollection<Version>Versions { get; set; }
     }
 
     

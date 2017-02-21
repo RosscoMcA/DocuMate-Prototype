@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace IntegratedProject3.Models
+namespace IP3.Data
 {
     /// <summary>
     /// Code first representation of the Version Table of the database
@@ -54,5 +54,5 @@ namespace IntegratedProject3.Models
 
     }
 
-    public enum DocumentState { Active, Draft, Archived}
+    public enum DocumentState { Active, Draft}
 }
