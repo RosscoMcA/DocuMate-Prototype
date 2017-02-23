@@ -23,7 +23,7 @@ namespace IntegratedProject3.Models
         /// </summary>
         public virtual Account Author { get; set; }
 
-        public virtual ICollection<Version>Versions { get; set; }
+        public virtual ICollection<Revision>Reversions { get; set; }
     }
 
     

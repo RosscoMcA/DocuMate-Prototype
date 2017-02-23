@@ -7,10 +7,16 @@ using System.Web;
 
 namespace IntegratedProject3.Models
 {
+
+    /// <change_log>
+    /// Class has been renamed from "Version" to "Revision" due to Visual Studio having it's on conflicting class "System.Version".
+    /// It was agreed that it was better to rename to "Revision" instead of using "Model.Version" for the sake of readiblity.
+    /// </change_log>
+
     /// <summary>
     /// Code first representation of the Version Table of the database
     /// </summary>
-    public class Version
+    public class Revision
     {
         /// <summary>
         /// Reference of the document class - Document that this version is applicable to.

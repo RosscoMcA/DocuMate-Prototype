@@ -114,7 +114,7 @@ namespace IntegratedProject3.Migrations
                         Author = author
                     };
 
-                    Models.Version v1 = new Models.Version
+                    Models.Revision v1 = new Models.Revision
                     {
                         DocumentTitle = "Test Document",
                         RevisionNum = 1.1,
@@ -125,7 +125,7 @@ namespace IntegratedProject3.Migrations
                         Distributees = new Collection<Account>()
                     };
 
-                    Models.Version v2 = new Models.Version 
+                    Models.Revision v2 = new Models.Revision 
                     {
                         DocumentTitle = "New Test Document",
                         RevisionNum = 2.1,
@@ -143,9 +143,9 @@ namespace IntegratedProject3.Migrations
                     v2.Distributees.Add(distributee);
                     v2.Distributees.Add(distributee2);
 
-                    context.Versions.Add(v1);
+                    context.Revisions.Add(v1);
 
-                    context.Versions.Add(v2);
+                    context.Revisions.Add(v2);
 
                                      
 
@@ -229,7 +229,7 @@ namespace IntegratedProject3.Migrations
                 throw new Exception(string.Join(";", userCreateResult.Errors));
             }
         }
-
+        
     }
 }
 
