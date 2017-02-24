@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
 using Microsoft.AspNet.Identity;
+using System.Web.Security;
 
 namespace IntegratedProject3.Controllers
 {
@@ -54,17 +55,23 @@ namespace IntegratedProject3.Controllers
         public ActionResult Create([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
 
-            var currentUser = User.Identity.GetUserId();
-
-            if (currentUser != revision.document.Author.Id)
-
-            if (ModelState.IsValid)
+            object currentUser = Membership.GetUser().ProviderUserKey;
+            
+            if(currentUser != revision.document.Author)
             {
-                db.Revisions.Add(revision);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
+                if (ModelState.IsValid)
+                {
+                    db.Revisions.Add(revision);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+            } else
+            {
+                throw new Exception("Only the original author create new revisions.");
+            }
+         
             return View(revision);
         }
 
