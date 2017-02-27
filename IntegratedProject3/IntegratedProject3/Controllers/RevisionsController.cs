@@ -12,13 +12,13 @@ using System.Web.Security;
 
 namespace IntegratedProject3.Controllers
 {
-    public class RevisionsController : Controller
+    public class RevisionsController : RootController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Revisions
         [Authorize]
-        public ActionResult Index()
+        public new ActionResult Index()
         {
             return View(db.Revisions.ToList());
         }
@@ -55,13 +55,13 @@ namespace IntegratedProject3.Controllers
         public ActionResult Create([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
 
-            object currentUser = Membership.GetUser().ProviderUserKey;
-            
-            if(currentUser != revision.document.Author)
+            if (VerifyAuthor(revision))
             {
 
                 if (ModelState.IsValid)
                 {
+                    revision.ActivationDate = DateTime.Now;
+                    revision.State = DocumentState.Draft;
                     db.Revisions.Add(revision);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -97,6 +97,8 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
+
+    
             if (ModelState.IsValid)
             {
                 db.Entry(revision).State = EntityState.Modified;
