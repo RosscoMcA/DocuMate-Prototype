@@ -6,11 +6,18 @@ using System.Web.Mvc;
 
 namespace IntegratedProject3.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : RootController
     {
         public ActionResult Index()
         {
-            return View();
+            var account = getAccount();
+            if (account != null) return View();
+            else
+            {
+
+                return RedirectToAction("Login", "Account");
+
+            }
         }
 
         public ActionResult About()
