@@ -1,0 +1,58 @@
+﻿@model IntegratedProject3.Models.Revision
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Revision</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocCreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocCreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActivationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActivationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.File)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.File)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RevisionNum }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

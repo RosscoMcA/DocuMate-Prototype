@@ -18,7 +18,7 @@ namespace IntegratedProject3.Controllers
 
         // GET: Revisions
         [Authorize]
-        public new ActionResult Index()
+        public ActionResult Index()
         {
             return View(db.Revisions.ToList());
         }
@@ -67,9 +67,8 @@ namespace IntegratedProject3.Controllers
                     return RedirectToAction("Index");
                 }
 
-            } else
-            {
-                throw new Exception("Only the original author create new revisions.");
+            } else {
+                throw new Exception("Only the original author can create new revisions.");
             }
          
             return View(revision);
@@ -78,6 +77,7 @@ namespace IntegratedProject3.Controllers
         // GET: Revisions/Edit/5
         public ActionResult Edit(double? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -87,6 +87,13 @@ namespace IntegratedProject3.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (!(VerifyAuthor(revision)))
+            {
+                new Exception("Current user is not author of the document");
+                return RedirectToAction("Index");
+            }
+
             return View(revision);
         }
 
@@ -97,14 +104,26 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
-
-    
-            if (ModelState.IsValid)
+            if(VerifyAuthor(revision))
             {
-                db.Entry(revision).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                
+                if(revision.State == DocumentState.Draft)
+                {
+                    throw new Exception("Only draft documents can be edited. Please create a new revision.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(revision).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+            } else {
+                throw new Exception("Only the author can edit revisions");
             }
+    
+            
             return View(revision);
         }
 
@@ -120,6 +139,12 @@ namespace IntegratedProject3.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (VerifyAuthor(revision))
+            {
+                throw new Exception("Only the author can delete a revision.");
+            }
+
             return View(revision);
         }
 

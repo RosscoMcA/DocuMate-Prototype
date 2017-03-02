@@ -243,10 +243,14 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Revisions\Create.cshtml" />
+    <Content Include="Views\Revisions\Edit.cshtml" />
+    <Content Include="Views\Revisions\Index.cshtml" />
+    <Content Include="Views\Revisions\Delete.cshtml" />
+    <Content Include="Views\Revisions\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Revisions\" />
     <Folder Include="Views\Root\" />
   </ItemGroup>
   <ItemGroup>

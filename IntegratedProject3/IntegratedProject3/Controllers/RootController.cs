@@ -51,7 +51,7 @@ namespace IntegratedProject3.Controllers
 
 
         /// <summary>
-        /// Checks if the current user is an admin
+        /// Checks if the current user is an Admin
         /// </summary>
         /// <returns>True if admin is logged in, otherwise false</returns>
         public bool isAdmin()
@@ -109,7 +109,7 @@ namespace IntegratedProject3.Controllers
 
 
         /// <summary>
-        /// Checks if the current user is an admin
+        /// Checks if the current user is an Author
         /// </summary>
         /// <returns>True if author is logged in, otherwise false</returns>
         public bool isAuthor()
