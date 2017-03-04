@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using IntegratedProject3.Models;
+using System.Data.Entity.Migrations;
 
 namespace IntegratedProject3.Controllers
 {
@@ -52,6 +53,21 @@ namespace IntegratedProject3.Controllers
             }
         }
 
+        /// <summary>
+        /// Displays a list of users 
+        /// </summary>
+        /// <returns>A list of all users</returns>
+        public ActionResult List()
+        {
+            if (this.isAdmin() == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var users = db.Accounts.Select(AccountListModel.ViewModel);
+
+            return View(users);
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -60,6 +76,69 @@ namespace IntegratedProject3.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
+        /// <summary>
+        ///  Gets the selected Users Details for editing
+        /// </summary>
+        /// <returns>The View the the users current Details</returns>
+        public ActionResult Edit(string id)
+        {
+            var user = db.Accounts.Where(u => u.Id.Equals(id)).SingleOrDefault();
+
+            if (user != null)
+            {
+                var account = new AccountEditModel()
+                {
+                    ID = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Surname = user.Surname,
+                    Type = user.AccountType
+
+                };
+
+                return View(account);
+            }
+            else
+            {
+                return RedirectToAction("List", "Account");
+            }
+
+            
+        }
+
+        /// <summary>
+        /// Processes the editing of the users account based on valid credentials 
+        /// </summary>
+        /// <param name="model">The editing model</param>
+        /// <returns>Redirection to the account lists page if edit is successful, 
+        /// Return to editing page otherwise.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(AccountEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Accounts.Where(u => u.Id == model.ID).SingleOrDefault();
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.Surname = model.Surname;
+                user.AccountType = model.Type;
+                db.Accounts.AddOrUpdate(user);
+                db.SaveChanges();
+
+                return RedirectToAction("List", "Account");
+            }
+
+            return View(model);
+        }
+
+        
+
+        
+
+
+
 
         //
         // POST: /Account/Login
@@ -142,6 +221,7 @@ namespace IntegratedProject3.Controllers
             return View();
         }
 
+
         //
         // POST: /Account/Register
         [HttpPost]
@@ -151,19 +231,24 @@ namespace IntegratedProject3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new Account
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Surname = model.Surname,
+                    FirstName = model.FirstName, 
+                    AccountType = model.Type
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Account", "List");
                 }
                 AddErrors(result);
             }

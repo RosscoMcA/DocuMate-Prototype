@@ -20,7 +20,7 @@ namespace IntegratedProject3.Models
     /// <summary>
     /// ENUM Representation of the system 
     /// </summary>
-    public enum AccountType { Author, Admin, Distributee}
+    public enum AccountType { Author, Admin, Distributee, Archived}
 
     
 }

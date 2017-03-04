@@ -11,7 +11,7 @@ namespace IntegratedProject3.Controllers
 {
     public class RootController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext(); 
+        public ApplicationDbContext db = new ApplicationDbContext(); 
 
 
         /// <summary>
