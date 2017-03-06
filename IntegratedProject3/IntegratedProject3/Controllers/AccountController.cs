@@ -56,7 +56,7 @@ namespace IntegratedProject3.Controllers
         /// <summary>
         /// Displays a list of users 
         /// </summary>
-        /// <returns>A list of all users</returns>
+        /// <returns>A list of all users if an admin is using the system</returns>
         public ActionResult List()
         {
             if (this.isAdmin() == false)
@@ -222,6 +222,8 @@ namespace IntegratedProject3.Controllers
         }
 
 
+        
+
         //
         // POST: /Account/Register
         [HttpPost]
@@ -248,7 +250,7 @@ namespace IntegratedProject3.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Account", "List");
+                    return RedirectToAction("List", "Account");
                 }
                 AddErrors(result);
             }

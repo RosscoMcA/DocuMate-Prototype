@@ -4,10 +4,11 @@
     ViewBag.Title = "List";
 }
 
-<h2>List</h2>
+<h2>User List</h2>
+<h3>This Area contains all types of users that the system runs </h3>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Register")
 </p>
 <table class="table">
     <tr>
@@ -42,9 +43,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Archive", "Archive", new { id=item.ID })
-        </td>
+         </td>
     </tr>
 }
 
