@@ -12,22 +12,89 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using IntegratedProject3.Models;
 
+using System.Net.Http;
+using System.Net.Mail;
+using SendGrid;
+using System.Net;
+using System.Configuration;
+using Twilio;
+
+
 namespace IntegratedProject3
 {
-    public class EmailService : IIdentityMessageService
+    /// <summary>
+    /// Handles the distribution of emails
+    /// </summary>
+      public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        /// <summary>
+        /// Handles the distribution of emails 
+        /// </summary>
+        /// <param name="message">The message to be sent to the specified recepient</param>
+        /// <returns>The Status of the taske being sent</returns>
+      public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            
+            return configSendGridAsync(message);
+        }
+
+        /// <summary>
+        /// Conducts the sending of emails to a single recipeient 
+        /// </summary>
+        /// <param name="message">The Message details to send</param>
+        /// <returns>The Status of the email sent</returns>
+        public Task configSendGridAsync(IdentityMessage message)
+        {
+            var myMessage = new SendGridMessage();
+            myMessage.AddTo(message.Destination);
+            myMessage.From = new MailAddress(
+                                "DocumentManagement@Doc.com", "Document Management Team");
+            myMessage.Subject = message.Subject;
+            myMessage.Text = message.Body;
+            myMessage.Html = message.Body;
+
+            var credentials = new NetworkCredential(
+                       ConfigurationManager.AppSettings["mailAccount"],
+                       ConfigurationManager.AppSettings["mailPassword"]
+                       );
+
+            // Create a Web transport for sending email.
+            var transportWeb = new Web(credentials);
+
+            // Send the email.
+            if (transportWeb != null)
+            {
+                return transportWeb.DeliverAsync(myMessage);
+            }
+            else
+            {
+                return Task.FromResult(0);
+            }
         }
     }
-
+   
+    /// <summary>
+    /// Service handles the send of and 
+    /// </summary>
     public class SmsService : IIdentityMessageService
     {
+
+        /// <summary>
+        /// Conducts the sending of SMS Messages to a number
+        /// </summary>
+        /// <param name="message">The Message to send</param>
+        /// <returns>THe status of the message sent</returns>
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your SMS service here to send a text message.
+            ///Creates the service and its credentials that are required
+            var Twilio = new TwilioRestClient(
+               ConfigurationManager.AppSettings["SMSAccountIdentification"],
+               ConfigurationManager.AppSettings["SMSAccountPassword"]);
+
+            ///Sends the message
+            var res = Twilio.SendMessage(
+                ConfigurationManager.AppSettings["SMSFrom"], message.Destination, message.Body);
+
             return Task.FromResult(0);
         }
     }
@@ -54,7 +121,7 @@ namespace IntegratedProject3
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
+                RequireNonLetterOrDigit = false,
                 RequireDigit = true,
                 RequireLowercase = true,
                 RequireUppercase = true,
@@ -76,7 +143,7 @@ namespace IntegratedProject3
                 Subject = "Security Code",
                 BodyFormat = "Your security code is {0}"
             });
-            manager.EmailService = new EmailService();
+           // manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)

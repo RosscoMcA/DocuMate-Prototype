@@ -10,6 +10,9 @@ namespace IntegratedProject3.Controllers
     {
         public ActionResult Index()
         {
+
+
+            
             return View();
         }
 
