@@ -1,0 +1,19 @@
+﻿@model IntegratedProject3.Models.SDVMDetails
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>"@Html.Raw(Model.DocTitle)" - Details</h2>
+
+<div>
+    <h4>Document Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("View Details of Revision", "DetailsOfDoc", new { id = Model.RevisionNum }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Document.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
