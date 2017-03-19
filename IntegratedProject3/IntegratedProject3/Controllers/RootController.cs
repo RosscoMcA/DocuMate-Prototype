@@ -23,7 +23,7 @@ namespace IntegratedProject3.Controllers
         {
             //was object, object isn't going to help in this case because an Object may not be returned
             var currentUser = getAccount();
-            return (currentUser == revision.document.Author);
+            return (currentUser.Id == revision.document.Author.Id);
 
         }
 
@@ -40,8 +40,7 @@ namespace IntegratedProject3.Controllers
         {
             var userID = User.Identity.GetUserId();
 
-            Account accountFound = db.Accounts.Where(u => u.Id == userID)
-                .FirstOrDefault();
+            Account accountFound = db.Accounts.Where(u => u.Id == userID).FirstOrDefault();
             if (accountFound != null) return accountFound;
             else
             {

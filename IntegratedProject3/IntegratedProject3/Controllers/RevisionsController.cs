@@ -20,12 +20,15 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View(db.Revisions.ToList());
+            //Temporary fix
+            int docID = 1;
+            var revisions = db.Revisions.Where(r => r.document.ID == docID);
+            return View(revisions.ToList());
         }
 
         // GET: Revisions/Details/5
         [Authorize]
-        public ActionResult Details(double? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -60,6 +63,7 @@ namespace IntegratedProject3.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    revision.id = Guid.NewGuid().ToString();
                     revision.ActivationDate = DateTime.Now;
                     revision.State = DocumentState.Draft;
                     db.Revisions.Add(revision);
@@ -75,7 +79,7 @@ namespace IntegratedProject3.Controllers
         }
 
         // GET: Revisions/Edit/5
-        public ActionResult Edit(double? id)
+        public ActionResult Edit(string id)
         {
 
             if (id == null)
@@ -102,7 +106,7 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
+        public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
             if(VerifyAuthor(revision))
             {
@@ -128,7 +132,7 @@ namespace IntegratedProject3.Controllers
         }
 
         // GET: Revisions/Delete/5
-        public ActionResult Delete(double? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
