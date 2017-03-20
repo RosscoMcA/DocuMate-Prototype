@@ -31,9 +31,14 @@ namespace IntegratedProject3.Models
         public virtual Document document { get; set; }
 
         /// <summary>
-        ///  Composite key
+        /// UID
         /// </summary>
         [Key]
+        public string id { get; set; }
+
+        /// <summary>
+        ///  Revision identifer 
+        /// </summary>
         public double RevisionNum { get; set; }
 
         /// <summary>

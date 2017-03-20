@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using IntegratedProject3.Models;
 using Microsoft.AspNet.Identity;
 using System.Web.Security;
+using System.Data.Entity.Migrations;
 
 namespace IntegratedProject3.Controllers
 {
@@ -20,12 +21,14 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View(db.Revisions.ToList());
+            int docID = 1;
+            var revisions = db.Revisions.Where(r => r.document.ID == docID);
+            return View(revisions.ToList());
         }
 
         // GET: Revisions/Details/5
         [Authorize]
-        public ActionResult Details(double? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -55,43 +58,37 @@ namespace IntegratedProject3.Controllers
         public ActionResult Create([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
 
-            if (VerifyAuthor(revision))
-            {
-
                 if (ModelState.IsValid)
                 {
+                    revision.id = Guid.NewGuid().ToString();
                     revision.ActivationDate = DateTime.Now;
                     revision.State = DocumentState.Draft;
                     db.Revisions.Add(revision);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
-            } else {
-                throw new Exception("Only the original author can create new revisions.");
-            }
          
             return View(revision);
         }
 
         // GET: Revisions/Edit/5
-        public ActionResult Edit(double? id)
+        public ActionResult Edit(string id)
         {
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Revision revision = db.Revisions.Find(id);
+            var revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
+
             if (revision == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Revisions");
             }
 
             if (!(VerifyAuthor(revision)))
             {
-                new Exception("Current user is not author of the document");
-                return RedirectToAction("Index");
+                new Exception("current user is not author of the document");
+                return RedirectToAction("index");
             }
 
             return View(revision);
@@ -102,10 +99,8 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
+        public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
-            if(VerifyAuthor(revision))
-            {
                 
                 if(revision.State == DocumentState.Draft)
                 {
@@ -114,33 +109,28 @@ namespace IntegratedProject3.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    db.Entry(revision).State = EntityState.Modified;
+                    db.Revisions.AddOrUpdate(revision);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
-            } else {
-                throw new Exception("Only the author can edit revisions");
-            }
-    
             
             return View(revision);
         }
 
         // GET: Revisions/Delete/5
-        public ActionResult Delete(double? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Revision revision = db.Revisions.Find(id);
+            Revision revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
             if (revision == null)
             {
                 return HttpNotFound();
             }
 
-            if (VerifyAuthor(revision))
+            if (!(VerifyAuthor(revision)))
             {
                 throw new Exception("Only the author can delete a revision.");
             }
@@ -151,7 +141,7 @@ namespace IntegratedProject3.Controllers
         // POST: Revisions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(double id)
+        public ActionResult DeleteConfirmed(string id)
         {
             Revision revision = db.Revisions.Find(id);
             db.Revisions.Remove(revision);

@@ -116,6 +116,7 @@ namespace IntegratedProject3.Migrations
 
                     Models.Revision v1 = new Models.Revision
                     {
+                        id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Test Document",
                         RevisionNum = 1.1,
                         document = doc,
@@ -127,6 +128,7 @@ namespace IntegratedProject3.Migrations
 
                     Models.Revision v2 = new Models.Revision 
                     {
+                        id = Guid.NewGuid().ToString(),
                         DocumentTitle = "New Test Document",
                         RevisionNum = 2.1,
                         document = doc,
