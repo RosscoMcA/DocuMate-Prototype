@@ -2,6 +2,7 @@
 using Amazon.S3.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -9,11 +10,15 @@ namespace IntegratedProject3.Controllers
 {
     public class FileStoreService
     {
-
-        private const string bucketName = "";
+        private const string bucketName = "cwkTest";
         private const string AWS_ACCESS_KEY = "";
 
-        public void UploadFile(HttpPostedFile file)
+        /// <summary>
+        /// Stores a file on the data storage center
+        /// </summary>
+        /// <param name="file">The File to be Stored</param>
+        /// <returns>returns the key to be stored</returns>
+        public string UploadFile(HttpPostedFile file)
         {
             var client = new AmazonS3Client(Amazon.RegionEndpoint.EUWest1);
 
@@ -23,14 +28,14 @@ namespace IntegratedProject3.Controllers
                 {
                     CannedACL = S3CannedACL.PublicReadWrite,
                     BucketName = bucketName,
-                    Key = AWS_ACCESS_KEY,
+                    Key = Guid.NewGuid().ToString(),
                     InputStream = file.InputStream,
                     ContentType = "Document"
                 };
 
                 var response = client.PutObject(putRequest);
 
-               
+                return putRequest.Key;
             }
             catch (AmazonS3Exception e)
             {
@@ -47,5 +52,28 @@ namespace IntegratedProject3.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the file from the bucket based on the key entered
+        /// </summary>
+        /// <param name="key">The File Key</param>
+        /// <returns>The Stream of the file stored. </returns>
+        public Stream GetFile(string key)
+        {
+            using (var client = new AmazonS3Client(Amazon.RegionEndpoint.EUWest1))
+            {
+                GetObjectRequest request = new GetObjectRequest()
+                {
+                    BucketName = bucketName,
+                    Key = key
+                };
+
+                GetObjectResponse response = client.GetObject(request);
+
+                return response.ResponseStream;
+            }
+        }
+
     }
+
+}
 }
