@@ -28,6 +28,7 @@ namespace IntegratedProject3.Models
         /// Title of the document 
         /// </summary>
         public string DocumentTitle { get; set; }
+
         
         /// <summary>
         /// Date of Document Creation
