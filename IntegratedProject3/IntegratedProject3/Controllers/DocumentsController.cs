@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
+using System.IO;
 
 namespace IntegratedProject3.Controllers
 {
@@ -122,6 +123,27 @@ namespace IntegratedProject3.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Allows the user to dowload the file given
+        /// </summary>
+        /// <param name="docKey">They key of the file to be downloaded</param>
+        /// <returns>The file to download if successful, otherwise nothing</returns>
+        public FileResult Download(string docKey)
+        {
+            FileStoreService fss = new FileStoreService();
+
+           var file = fss.GetFile(docKey);
+
+            if (file != null)
+            {
+                return File(file, "document", (file as FileStream).Name);
+            }
+             else
+            {
+                return null;
+            }
         }
     }
 }
