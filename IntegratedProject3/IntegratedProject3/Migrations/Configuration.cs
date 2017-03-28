@@ -111,10 +111,11 @@ namespace IntegratedProject3.Migrations
                     //Constructing 
                     Document doc = new Document
                     {
+                        id = Guid.NewGuid().ToString(),
                         Author = author
                     };
 
-                    Models.Revision v1 = new Models.Revision
+                    Revision v1 = new Models.Revision
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Test Document",

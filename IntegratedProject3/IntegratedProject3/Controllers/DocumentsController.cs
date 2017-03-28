@@ -7,26 +7,36 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
+using Microsoft.AspNet.Identity;
 
 namespace IntegratedProject3.Controllers
 {
-    public class DocumentsController : Controller
+    public class DocumentsController : RootController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        
 
-        // GET: Documents
+        // GET: 
         public ActionResult Index()
         {
             var documents = db.Documents;
-            var revisions = db.Revisions;
-            DocumentViewModel DocViewModel = new DocumentViewModel();
-            DocViewModel.Revisions = db.Revisions.ToList();
-            DocViewModel.Documents = db.Documents.ToList();
-            return View(DocViewModel);
+
+            var allDocs = from d in documents
+                          select new SDVMDetails()
+                          {
+                            id = d.id, 
+                            Author = d.Author,
+                            DocTitle = d.Revisions.Where(r => r.document.id == d.id && r.State == DocumentState.Active)
+                            .SingleOrDefault().DocumentTitle,
+                            RevisionNum = d.Revisions.Where(r => r.document.id == d.id && r.State == DocumentState.Active)
+                              .SingleOrDefault().RevisionNum
+                          }; 
+          
+            return View(allDocs.ToList());
+
         }
 
         // GET: Documents/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -37,28 +47,9 @@ namespace IntegratedProject3.Controllers
             {
                 return HttpNotFound();
             }
-            int marker = 0;
-            int c = 0;
-            var Rev = db.Revisions.ToList();
-            foreach (var item in Rev)
-            {
-                if ((item.document == document) && (item.DocCreationDate > Rev.ElementAt(marker).DocCreationDate))
-                {
-                    marker = c;
-                    c++;
-                }
-                else
-                {
-                    c++;
-                }
-            }
-            string Title = Rev.ElementAt(marker).DocumentTitle;
-            double RevisionNum = Rev.ElementAt(marker).RevisionNum;
-            SDVMDetails SDVM = new SDVMDetails();
-            SDVM.Document = document;
-            SDVM.DocTitle = Title;
-            SDVM.RevisionNum = RevisionNum;
-            return View(SDVM);
+
+            return View(document);
+
         }
 
         // GET: Documents/Create
@@ -72,20 +63,22 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID")] Document document)
+        public ActionResult Create([Bind(Include = "")] Document document)
         {
             if (ModelState.IsValid)
             {
+                //document.ID = Guid.NewGuid().ToString() - document.id needs to be changed to a string so  that guid can work.
+                //document.Author.Id = User.Identity.GetUserId();
                 db.Documents.Add(document);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Revisions");
             }
 
             return View(document);
         }
 
         // GET: Documents/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -96,26 +89,9 @@ namespace IntegratedProject3.Controllers
             {
                 return HttpNotFound();
             }
-            int marker = 0;
-            int c = 0;
-            var Rev = db.Revisions.ToList();
-            foreach (var item in Rev)
-            {
-                if ((item.document == document) && (item.DocCreationDate > Rev.ElementAt(marker).DocCreationDate))
-                {
-                    marker = c;
-                    c++;
-                }
-                else
-                {
-                    c++;
-                }
-            }
-            string Title = Rev.ElementAt(marker).DocumentTitle;
-            SingleDocViewModel SDVM = new SingleDocViewModel();
-            SDVM.Document = document;
-            SDVM.DocTitle = Title; 
-            return View(SDVM);
+
+            return View(document);
+
         }
 
         // POST: Documents/Edit/5
@@ -131,30 +107,13 @@ namespace IntegratedProject3.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            int marker = 0;
-            int c = 0;
-            var Rev = db.Revisions.ToList();
-            foreach (var item in Rev)
-            {
-                if ((item.document == document) && (item.DocCreationDate > Rev.ElementAt(marker).DocCreationDate))
-                {
-                    marker = c;
-                    c++;
-                }
-                else
-                {
-                    c++;
-                }
-            }
-            string Title = Rev.ElementAt(marker).DocumentTitle;
-            SingleDocViewModel SDVM = new SingleDocViewModel();
-            SDVM.Document = document;
-            SDVM.DocTitle = Title;
-            return View(SDVM);
+
+            return View(document);
+
         }
 
         // GET: Documents/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
@@ -165,32 +124,15 @@ namespace IntegratedProject3.Controllers
             {
                 return HttpNotFound();
             }
-            int marker = 0;
-            int c = 0;
-            var Rev = db.Revisions.ToList();
-            foreach (var item in Rev)
-            {
-                if ((item.document == document) && (item.DocCreationDate > Rev.ElementAt(marker).DocCreationDate))
-                {
-                    marker = c;
-                    c++;
-                }
-                else
-                {
-                    c++;
-                }
-            }
-            string Title = Rev.ElementAt(marker).DocumentTitle;
-            SingleDocViewModel SDVM = new SingleDocViewModel();
-            SDVM.Document = document;
-            SDVM.DocTitle = Title;
-            return View(SDVM);
+
+            return View(document);
+
         }
 
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
             Document document = db.Documents.Find(id);
             db.Documents.Remove(document);
@@ -207,18 +149,5 @@ namespace IntegratedProject3.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult DetailsOfDoc(double? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Revision revision = db.Revisions.Find(id);
-            if (revision == null)
-            {
-                return HttpNotFound();
-            }
-            return View(revision);
-        }
     }
 }

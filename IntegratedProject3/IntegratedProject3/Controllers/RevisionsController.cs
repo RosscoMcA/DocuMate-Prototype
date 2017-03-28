@@ -14,15 +14,14 @@ namespace IntegratedProject3.Controllers
 {
     public class RevisionsController : RootController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        
 
         // GET: Revisions
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string docId)
         {
-            //Temporary fix
-            int docID = 1;
-            var revisions = db.Revisions.Where(r => r.document.ID == docID);
+            
+            var revisions = db.Revisions.Where(r => r.document.id == docId);
             return View(revisions.ToList());
         }
 
@@ -58,8 +57,8 @@ namespace IntegratedProject3.Controllers
         public ActionResult Create([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
 
-            if (VerifyAuthor(revision))
-            {
+            //if (VerifyAuthor(revision))
+           // {
 
                 if (ModelState.IsValid)
                 {
@@ -71,9 +70,9 @@ namespace IntegratedProject3.Controllers
                     return RedirectToAction("Index");
                 }
 
-            } else {
-                throw new Exception("Only the original author can create new revisions.");
-            }
+          //  } else {
+              //  throw new Exception("Only the original author can create new revisions.");
+          //  }
          
             return View(revision);
         }

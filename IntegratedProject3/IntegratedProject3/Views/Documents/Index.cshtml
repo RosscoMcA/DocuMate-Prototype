@@ -1,4 +1,4 @@
-﻿@model IntegratedProject3.Models.DocumentViewModel
+﻿@model ICollection<IntegratedProject3.Models.SDVMDetails>
     
 
 @{
@@ -12,40 +12,30 @@
 </p>
 <table class="table">
     <tr>
-        <th>@Html.Raw("Document Title")</th>
+        <th>
+            @Html.Display("Document Title")
+        </th>
+        <th>
+            @Html.Display("Revision Number")
+        </th>
+        <th></th>
     </tr>
-@foreach (var item in Model.Documents)
-{
-    int marker = 0;
-    int c = 0;
-    <tr>
-        <td>
-                @foreach (var newitem in Model.Revisions)
-                {
-                    if ((item == newitem.document) && (newitem.DocCreationDate > Model.Revisions.ElementAt(marker).DocCreationDate))
-                    {
-                        marker = c;
-                        c++;
-                    } else
-                    {
-                        c++;
-                    }
 
-                }
-            
-                @Html.Raw(Model.Revisions.ElementAt(marker).DocumentTitle)
-
-
-
-
-        </td>
-            
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-        </td>
-    </tr>
-    } 
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
 
 </table>

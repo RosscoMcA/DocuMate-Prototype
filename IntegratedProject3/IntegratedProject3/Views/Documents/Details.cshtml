@@ -1,4 +1,4 @@
-﻿@model IntegratedProject3.Models.SDVMDetails
+﻿@model IntegratedProject3.Models.Document
 
 @{
     ViewBag.Title = "Details";
@@ -9,11 +9,11 @@
 <div>
     <h4>Document Details</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal">                                                                              
     </dl>
 </div>
 <p>
     @Html.ActionLink("View Details of Revision", "Details", new { id = Model.RevisionNum }) |
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Document.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
