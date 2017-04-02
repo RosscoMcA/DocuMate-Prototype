@@ -103,7 +103,7 @@ namespace IntegratedProject3.Controllers
             }
             var revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
 
-            if (revision.State != DocumentState.Draft)
+            if (revision.State == DocumentState.Active)
             {
                 throw new Exception("Only draft documents can be edited. Please create a new revision.");
             }
