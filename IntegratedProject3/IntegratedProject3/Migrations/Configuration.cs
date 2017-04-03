@@ -111,6 +111,7 @@ namespace IntegratedProject3.Migrations
                     //Constructing 
                     Document doc = new Document
                     {
+                        id = Guid.NewGuid().ToString(),
                         Author = author
                     };
 
@@ -138,6 +139,17 @@ namespace IntegratedProject3.Migrations
                         Distributees = new Collection<Account>()
                     };
 
+                    Models.Revision v3 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Another Test Document",
+                        RevisionNum = 3.1,
+                        document = doc,
+                        State = DocumentState.Draft,
+                        DocCreationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
                     context.Documents.Add(doc);
                     context.SaveChanges();
                     v1.Distributees.Add(distributee);
@@ -146,8 +158,8 @@ namespace IntegratedProject3.Migrations
                     v2.Distributees.Add(distributee2);
 
                     context.Revisions.Add(v1);
-
                     context.Revisions.Add(v2);
+                    context.Revisions.Add(v3);
 
                                      
 

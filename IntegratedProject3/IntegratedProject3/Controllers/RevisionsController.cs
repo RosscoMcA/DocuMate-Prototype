@@ -15,14 +15,37 @@ namespace IntegratedProject3.Controllers
 {
     public class RevisionsController : RootController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-        // GET: Revisions
+        
+        /// <summary>
+        /// Retrieves the Revisions Index. Displaying all revisions.
+        /// </summary>
+        /// <returns>ViewResult containing a list of Revisions.</returns>
         [Authorize]
         public ActionResult Index()
         {
-            int docID = 1;
-            var revisions = db.Revisions.Where(r => r.document.ID == docID);
+            var revisions = db.Revisions;
+            return View(revisions);
+        }
+
+        /// <summary>
+        /// Retrieves revisions associated with a specific document.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ViewResult containing list of Revisions</returns>
+        [Authorize]
+        public ActionResult DocumentRevisions(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var revisions = db.Revisions.Where(r => r.document.id == id);
+            if (revisions == null)
+            {
+                return HttpNotFound();
+            }
+
             return View(revisions.ToList());
         }
 
@@ -55,13 +78,13 @@ namespace IntegratedProject3.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
+        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
         {
 
                 if (ModelState.IsValid)
                 {
                     revision.id = Guid.NewGuid().ToString();
-                    revision.ActivationDate = DateTime.Now;
+                    revision.DocCreationDate = DateTime.Now;
                     revision.State = DocumentState.Draft;
                     db.Revisions.Add(revision);
                     db.SaveChanges();
@@ -80,16 +103,24 @@ namespace IntegratedProject3.Controllers
             }
             var revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
 
+            if (revision.State == DocumentState.Active)
+            {
+                throw new Exception("Only draft documents can be edited. Please create a new revision.");
+            }
+
             if (revision == null)
             {
                 return RedirectToAction("Index", "Revisions");
             }
 
-            if (!(VerifyAuthor(revision)))
-            {
-                new Exception("current user is not author of the document");
-                return RedirectToAction("index");
-            }
+            // This block is temporarily removed for testing purposes.
+            // Due to this branch not containing the document systems implemented.
+
+            //if (!(VerifyAuthor(revision)))
+            //{
+            //    new Exception("current user is not author of the document");
+            //    return RedirectToAction("index");
+            //}
 
             return View(revision);
         }
@@ -99,20 +130,27 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
+        public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,State,ActivationDate")] Revision revision)
         {
-                
-                if(revision.State == DocumentState.Draft)
-                {
-                    throw new Exception("Only draft documents can be edited. Please create a new revision.");
-                }
 
-                if (ModelState.IsValid)
-                {
-                    db.Revisions.AddOrUpdate(revision);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+            //Fuck C#, consistently reset the date to 01/01/0001 when the minimum value it accepts
+            //is 01/01/1753. When the revision is passed in it still resets to 01/01/0001 however,
+            //now it takes the creation date from the current version of the revision and sets it to
+            //the creation date value of the updated revision.
+            var currentR = db.Revisions.Where(r => r.id == revision.id).SingleOrDefault();
+            revision.DocCreationDate = currentR.DocCreationDate;
+
+            if (revision.ActivationDate == null && revision.State == DocumentState.Active)
+            {
+                revision.ActivationDate = DateTime.Now;
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.Revisions.AddOrUpdate(revision);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
             
             return View(revision);
         }

@@ -27,6 +27,11 @@ namespace IntegratedProject3.Controllers
 
         }
 
+        /// <summary>
+        /// Checks the document state is "Draft".
+        /// </summary>
+        /// <param name="revision"></param>
+        /// <returns>Boolean value, true if the document state is "Draft".</returns>
         public bool VerifyDocumentState(Revision revision)
         {
             return (revision.State.Equals(DocumentState.Draft));

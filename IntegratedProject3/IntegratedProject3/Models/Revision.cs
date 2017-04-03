@@ -67,7 +67,7 @@ namespace IntegratedProject3.Models
         /// </summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
-        public DateTime ActivationDate { get; set; }
+        public DateTime? ActivationDate { get; set; }
 
         /// <summary>
         /// The file to store
