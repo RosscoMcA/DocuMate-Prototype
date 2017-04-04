@@ -111,11 +111,13 @@ namespace IntegratedProject3.Migrations
                     //Constructing 
                     Document doc = new Document
                     {
+                        id = Guid.NewGuid().ToString(),
                         Author = author
                     };
 
-                    Models.Version v1 = new Models.Version
+                    Models.Revisions v1 = new Models.Revisions
                     {
+                        id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Test Document",
                         RevisionNum = 1.1,
                         document = doc,
@@ -125,8 +127,9 @@ namespace IntegratedProject3.Migrations
                         Distributees = new Collection<Account>()
                     };
 
-                    Models.Version v2 = new Models.Version 
+                    Models.Revisions v2 = new Models.Revisions
                     {
+                        id = Guid.NewGuid().ToString(),
                         DocumentTitle = "New Test Document",
                         RevisionNum = 2.1,
                         document = doc,

@@ -16,14 +16,14 @@ namespace IntegratedProject3.Models
         /// Primary Key of Document, has the unique ID of a document
         /// </summary>
         [Key]
-        public int ID { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         /// Navigational Property for The author
         /// </summary>
         public virtual Account Author { get; set; }
 
-        public virtual ICollection<Version>Versions { get; set; }
+        public virtual ICollection<Revisions>Revisions { get; set; }
     }
 
     

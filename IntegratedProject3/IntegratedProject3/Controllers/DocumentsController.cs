@@ -11,8 +11,11 @@ using System.IO;
 
 namespace IntegratedProject3.Controllers
 {
-    public class DocumentsController : RootController
+    public class DocumentsController : Controller
     {
+
+        ApplicationDbContext db = new ApplicationDbContext();
+        
         // GET: Documents
         public ActionResult Index()
         {
@@ -130,7 +133,7 @@ namespace IntegratedProject3.Controllers
         /// <returns>The file to download if successful, otherwise nothing</returns>
         public FileResult Download(string docKey)
         {
-            FileStoreService fss = new FileStoreService;
+            FileStoreService fss = new FileStoreService();
 
             var file = fss.GetFile(docKey);
 

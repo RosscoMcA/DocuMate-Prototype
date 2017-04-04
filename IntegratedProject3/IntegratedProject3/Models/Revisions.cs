@@ -10,18 +10,23 @@ namespace IntegratedProject3.Models
     /// <summary>
     /// Code first representation of the Version Table of the database
     /// </summary>
-    public class Version
+    public class Revisions
     {
         /// <summary>
-        /// Reference of the document class - Document that this version is applicable to.
+        /// Reference of the document class - Document that this revision is applicable to.
         /// </summary>
         [Key]
         public virtual Document document { get; set; }
 
         /// <summary>
-        ///  Composite key
+        /// UID
         /// </summary>
         [Key]
+        public string id { get; set; }
+
+        /// <summary>
+        /// User specificed revision number
+        /// </summary>
         public double RevisionNum { get; set; }
 
         /// <summary>
