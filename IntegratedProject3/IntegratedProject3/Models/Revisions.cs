@@ -60,5 +60,5 @@ namespace IntegratedProject3.Models
 
     }
 
-    public enum DocumentState { Active, Draft, Archived}
+    public enum DocumentState { Active, Draft, Archived }
 }

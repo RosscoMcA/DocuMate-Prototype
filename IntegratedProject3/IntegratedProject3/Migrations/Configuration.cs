@@ -146,9 +146,9 @@ namespace IntegratedProject3.Migrations
                     v2.Distributees.Add(distributee);
                     v2.Distributees.Add(distributee2);
 
-                    context.Versions.Add(v1);
+                    context.Revisions.Add(v1);
 
-                    context.Versions.Add(v2);
+                    context.Revisions.Add(v2);
 
                                      
 

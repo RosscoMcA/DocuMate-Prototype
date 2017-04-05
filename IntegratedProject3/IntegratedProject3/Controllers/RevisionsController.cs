@@ -7,112 +7,114 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
-using System.IO;
 
 namespace IntegratedProject3.Controllers
 {
-    public class DocumentsController : Controller
+    public class RevisionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Documents
+        // GET: Revisions
         public ActionResult Index()
         {
-            return View(db.Documents.ToList());
+            return View(db.Revisions.ToList());
         }
 
-        // GET: Documents/Details/5
+        // GET: Revisions/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = db.Documents.Find(id);
-            if (document == null)
+            Revisions revisions = db.Revisions.Find(id);
+            if (revisions == null)
             {
                 return HttpNotFound();
             }
-            return View(document);
+            return View(revisions);
         }
 
-        // GET: Documents/Create
+        // GET: Revisions/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Documents/Create
+        // POST: Revisions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id")] Document document)
+        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revisions revisions, string id)
         {
+            ViewBag.id = id;
+        
             if (ModelState.IsValid)
             {
-                document.id = Guid.NewGuid().ToString();
-                db.Documents.Add(document);
+                revisions.document.id = id;
+                revisions.id = Guid.NewGuid().ToString();
+                db.Revisions.Add(revisions);
                 db.SaveChanges();
-                return RedirectToAction("Create", "Revisions", new { id = document.id });
+                return RedirectToAction("Index");
             }
 
-            return View(document);
+            return View(revisions);
         }
 
-        // GET: Documents/Edit/5
+        // GET: Revisions/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = db.Documents.Find(id);
-            if (document == null)
+            Revisions revisions = db.Revisions.Find(id);
+            if (revisions == null)
             {
                 return HttpNotFound();
             }
-            return View(document);
+            return View(revisions);
         }
 
-        // POST: Documents/Edit/5
+        // POST: Revisions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id")] Document document)
+        public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revisions revisions)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(document).State = EntityState.Modified;
+                db.Entry(revisions).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(document);
+            return View(revisions);
         }
 
-        // GET: Documents/Delete/5
+        // GET: Revisions/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Document document = db.Documents.Find(id);
-            if (document == null)
+            Revisions revisions = db.Revisions.Find(id);
+            if (revisions == null)
             {
                 return HttpNotFound();
             }
-            return View(document);
+            return View(revisions);
         }
 
-        // POST: Documents/Delete/5
+        // POST: Revisions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Document document = db.Documents.Find(id);
-            db.Documents.Remove(document);
+            Revisions revisions = db.Revisions.Find(id);
+            db.Revisions.Remove(revisions);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -125,33 +127,5 @@ namespace IntegratedProject3.Controllers
             }
             base.Dispose(disposing);
         }
-
-        /// <summary>
-        /// Allows the user to dowload the file given
-        /// </summary>
-        /// <param name="docKey">They key of the file to be downloaded</param>
-        /// <returns>The file to download if successful, otherwise nothing</returns>
-        public FileResult Download(string docKey)
-        {
-            FileStoreService fss = new FileStoreService();
-
-            var file = fss.GetFile(docKey);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                if (file != null)
-                {
-
-                    file.CopyTo(memoryStream);
-                    byte[] fileBytes = memoryStream.ToArray();
-                    return File(fileBytes, "application/unknown", "Test");
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
     }
 }
