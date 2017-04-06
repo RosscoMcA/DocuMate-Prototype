@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
 using System.IO;
+using Microsoft.AspNet.Identity;
 
 namespace IntegratedProject3.Controllers
 {
@@ -52,6 +53,8 @@ namespace IntegratedProject3.Controllers
             if (ModelState.IsValid)
             {
                 document.id = Guid.NewGuid().ToString();
+                string userId = User.Identity.GetUserId();
+                document.Author = db.Accounts.Find(userId);
                 db.Documents.Add(document);
                 db.SaveChanges();
                 return RedirectToAction("Create", "Revisions", new { id = document.id });
