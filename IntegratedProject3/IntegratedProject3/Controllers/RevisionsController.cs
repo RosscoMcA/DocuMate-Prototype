@@ -69,7 +69,10 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            return View();
+
+            IEnumerable<Account> accounts = db.Accounts.ToList();
+            var createRevisionModel = new RevisonViewModel(accounts);
+            return View(createRevisionModel);
         }
 
         // POST: Revisions/Create
@@ -78,7 +81,7 @@ namespace IntegratedProject3.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revision revision)
+        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate,Distributees")] Revision revision)
         {
 
                 if (ModelState.IsValid)

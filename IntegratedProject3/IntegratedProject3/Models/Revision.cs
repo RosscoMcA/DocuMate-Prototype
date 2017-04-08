@@ -75,9 +75,8 @@ namespace IntegratedProject3.Models
 
         public byte[] File { get; set; }
 
-
-
     }
 
     public enum DocumentState { Active, Draft, Archived}
+
 }
