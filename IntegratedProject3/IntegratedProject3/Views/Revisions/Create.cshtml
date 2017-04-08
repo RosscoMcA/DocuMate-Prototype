@@ -6,8 +6,9 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Revisions", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
+
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
@@ -31,17 +32,11 @@
                 </div>
             </div>
             
-            <div class="form-group">
-                @Html.LabelFor(model => model.Distributees, htmlAttributes: new { @class = "control-label col-md-2"})
-                <div class="col-md-10">
-                    @Html.ListBoxFor(model => model.Distributees, new MultiSelectList(Model.Accounts, "id", "username"))
-                    @Html.ValidationMessageFor(model => model.Distributees, "", new { @class = "text-danger" })
-                </div>
-            </div>
+            
            
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" class="btn btn-default" />
                 </div>
             </div>
         </div>

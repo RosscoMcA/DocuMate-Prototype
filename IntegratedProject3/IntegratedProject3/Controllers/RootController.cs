@@ -45,7 +45,7 @@ namespace IntegratedProject3.Controllers
         {
             var userID = User.Identity.GetUserId();
 
-            Account accountFound = db.Accounts.Find(userID);
+            var accountFound = db.Accounts.Where(u=> u.Id == userID).SingleOrDefault();
             if (accountFound != null) return accountFound;
             else
             {

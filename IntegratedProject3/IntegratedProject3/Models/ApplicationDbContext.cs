@@ -30,9 +30,6 @@ namespace IntegratedProject3.Models
             return new ApplicationDbContext();
         }
 
-        internal void AddorUpdate()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

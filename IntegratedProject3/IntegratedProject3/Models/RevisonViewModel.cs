@@ -7,17 +7,26 @@ namespace IntegratedProject3.Models
 {
     public class RevisonViewModel
     {
-
-        public string RevisionNum { get; set; }
+        public string DocID { get; set; }
+        public double RevisionNum { get; set; }
         public string DocumentTitle { get; set; }
-        public virtual IEnumerable<Account> Distributees { get; set; }
-        public virtual IEnumerable<Account> Accounts { get; set; }
+        
+       
 
-        public RevisonViewModel(IEnumerable<Account> accounts)
-        {
-            this.Accounts = accounts;
-        }
 
+    }
+
+    /// <summary>
+    /// Handles the selection of distributees for a single revision
+    /// </summary>
+    public class DistributeeSelectModel
+    {
+        /// <summary>
+        /// Attributes
+        /// </summary>
+        public string RevID { get; set; }
+
+        public IEnumerable<Account>Accounts { get; set; }
 
     }
 }

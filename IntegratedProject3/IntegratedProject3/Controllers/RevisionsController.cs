@@ -23,7 +23,7 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var revisions = db.Revisions;
+            var revisions = db.Revisions.ToList();
             return View(revisions);
         }
 
@@ -69,32 +69,101 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            string id = "f4d80ac9-1358-459f-b3af-b6cdbe34da82";
+            var document = db.Documents.Where(d => d.id == id).SingleOrDefault();
+            if (document != null)
+            {
 
-            IEnumerable<Account> accounts = db.Accounts.ToList();
-            var createRevisionModel = new RevisonViewModel(accounts);
-            return View(createRevisionModel);
+                IEnumerable<Account> accounts = db.Accounts.ToList();
+                var createRevisionModel = new RevisonViewModel();
+                createRevisionModel.DocID = id;
+                return View(createRevisionModel);
+
+            }
+            return View();
         }
 
         // POST: Revisions/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+       
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate,Distributees")] Revision revision)
+        [HttpPost]
+        public ActionResult Create([Bind(Include = "id, RevisionNum,DocumentTitle")] RevisonViewModel revision)
         {
 
                 if (ModelState.IsValid)
                 {
-                    revision.id = Guid.NewGuid().ToString();
-                    revision.DocCreationDate = DateTime.Now;
-                    revision.State = DocumentState.Draft;
-                    db.Revisions.Add(revision);
+                string id = "f4d80ac9-1358-459f-b3af-b6cdbe34da82";
+                var doc = db.Documents.Where(d => d.id == id).SingleOrDefault();
+                Revision newRevision = new Revision()
+                {
+                    id = Guid.NewGuid().ToString(),
+                    DocumentTitle = revision.DocumentTitle,
+                    RevisionNum = revision.RevisionNum,
+                    DocCreationDate = DateTime.Now,
+                    State = DocumentState.Draft,
+                    ActivationDate = DateTime.Now,
+                    document = doc,
+                    Distributees = new HashSet<Account>()
+                    
+                    
+
+            };
+
+                    
+                    db.Revisions.Add(newRevision);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                return RedirectToAction("SelectUsers", "Revisions", new { newRevision.id });
                 }
          
             return View(revision);
+        }
+
+        /// <summary>
+        /// Displays a list of distributees to be selected
+        /// </summary>
+        /// <param name="id">The ID of the revision</param>
+        /// <returns></returns>
+        public ActionResult SelectUsers(string id)
+        {
+            var DistributeeList = new DistributeeSelectModel();
+            DistributeeList.RevID = id;
+            DistributeeList.Accounts = db.Accounts.Where(u => u.AccountType == AccountType.Distributee);
+                
+            return View(DistributeeList);
+        }
+        /// <summary>
+        /// Adds a new distributee to the revision
+        /// </summary>
+        /// <param name="userKey">The User to be added </param>
+        /// <param name="rev">The Revision key</param>
+        /// <returns></returns>
+       
+        public ActionResult AddNewDistributee(string userKey, string revID)
+        {
+            var revision = db.Revisions.Where(r=> r.id == revID).SingleOrDefault();
+
+            var user = db.Accounts.Find(userKey);
+            if(user !=null && revision != null)
+            {
+
+                var alreadyContained = revision.Distributees.Contains(user);
+                if(alreadyContained == false)
+                {
+                    revision.Distributees.Add(user);
+                    db.Revisions.AddOrUpdate(revision);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //Insert Notification here
+                }
+            }
+
+            return RedirectToAction("SelectUsers", "Revisions", new { revID } );
+
         }
 
         // GET: Revisions/Edit/5

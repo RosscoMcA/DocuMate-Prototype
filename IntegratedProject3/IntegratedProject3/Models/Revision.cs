@@ -69,11 +69,7 @@ namespace IntegratedProject3.Models
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime? ActivationDate { get; set; }
 
-        /// <summary>
-        /// The file to store
-        /// </summary>
-
-        public byte[] File { get; set; }
+        
 
     }
 

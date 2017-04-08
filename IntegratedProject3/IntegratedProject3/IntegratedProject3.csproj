@@ -251,6 +251,7 @@
     <Content Include="Views\Revisions\Details.cshtml" />
     <Content Include="Views\Account\List.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Revisions\SelectUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

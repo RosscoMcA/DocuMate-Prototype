@@ -16,6 +16,7 @@ namespace IntegratedProject3.Models
 
         public string Surname { get; set; }
 
+
     }
     /// <summary>
     /// ENUM Representation of the system 
