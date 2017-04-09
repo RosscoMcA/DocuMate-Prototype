@@ -93,6 +93,7 @@ namespace IntegratedProject3.Controllers
                     Email = user.Email,
                     FirstName = user.FirstName,
                     Surname = user.Surname,
+                    Phone = user.PhoneNumber,
                     Type = user.AccountType
 
                 };
@@ -123,6 +124,7 @@ namespace IntegratedProject3.Controllers
                 user.Email = model.Email;
                 user.FirstName = model.FirstName;
                 user.Surname = model.Surname;
+                user.PhoneNumber = model.Phone;
                 user.AccountType = model.Type;
                 db.Accounts.AddOrUpdate(user);
                 db.SaveChanges();
@@ -239,6 +241,7 @@ namespace IntegratedProject3.Controllers
                     Email = model.Email,
                     Surname = model.Surname,
                     FirstName = model.FirstName, 
+                    PhoneNumber = model.Phone,
                     AccountType = model.Type
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);

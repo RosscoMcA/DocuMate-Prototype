@@ -97,6 +97,9 @@ namespace IntegratedProject3.Models
         public bool RememberMe { get; set; }
     }
 
+    /// <summary>
+    /// Handles the details of editing an account 
+    /// </summary>
     public class AccountEditModel
     {
         [Required]
@@ -111,6 +114,10 @@ namespace IntegratedProject3.Models
         public string FirstName { get; set; }
 
         [Required]
+        [Phone]
+        public string Phone { get; set; }
+
+        [Required]
         public string Surname { get; set; }
 
         [Required]
@@ -118,6 +125,10 @@ namespace IntegratedProject3.Models
 
     }
 
+
+    /// <summary>
+    /// Handles the creation of users within te system.
+    /// </summary>
     public class RegisterViewModel
     {
 
@@ -133,6 +144,10 @@ namespace IntegratedProject3.Models
 
         [Required]
         public string Surname { get; set; }
+
+        [Required]
+        [Phone]
+        public string Phone { get; set; }
 
         [Required]
         public AccountType Type { get; set; }
