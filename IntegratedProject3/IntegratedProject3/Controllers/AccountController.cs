@@ -22,7 +22,7 @@ namespace IntegratedProject3.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace IntegratedProject3.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -52,6 +52,21 @@ namespace IntegratedProject3.Controllers
             }
         }
 
+        /// <summary>
+        /// Displays a list of users 
+        /// </summary>
+        /// <returns>A list of all users if an admin is using the system</returns>
+        public ActionResult List()
+        {
+            if (this.isAdmin() == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var users = db.Accounts.Select(AccountListModel.ViewModel);
+
+            return View(users);
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -60,6 +75,71 @@ namespace IntegratedProject3.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
+        /// <summary>
+        ///  Gets the selected Users Details for editing
+        /// </summary>
+        /// <returns>The View the the users current Details</returns>
+        public ActionResult Edit(string id)
+        {
+            var user = db.Accounts.Where(u => u.Id.Equals(id)).SingleOrDefault();
+
+            if (user != null)
+            {
+                var account = new AccountEditModel()
+                {
+                    ID = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Surname = user.Surname,
+                    Phone = user.PhoneNumber,
+                    Type = user.AccountType
+
+                };
+
+                return View(account);
+            }
+            else
+            {
+                return RedirectToAction("List", "Account");
+            }
+
+
+        }
+
+        /// <summary>
+        /// Processes the editing of the users account based on valid credentials 
+        /// </summary>
+        /// <param name="model">The editing model</param>
+        /// <returns>Redirection to the account lists page if edit is successful, 
+        /// Return to editing page otherwise.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(AccountEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Accounts.Where(u => u.Id == model.ID).SingleOrDefault();
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.Surname = model.Surname;
+                user.PhoneNumber = model.Phone;
+                user.AccountType = model.Type;
+                db.Accounts.AddOrUpdate(user);
+                db.SaveChanges();
+
+                return RedirectToAction("List", "Account");
+            }
+
+            return View(model);
+        }
+
+
+
+
+
+
+
 
         //
         // POST: /Account/Login
@@ -75,7 +155,7 @@ namespace IntegratedProject3.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -120,7 +200,7 @@ namespace IntegratedProject3.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -142,6 +222,9 @@ namespace IntegratedProject3.Controllers
             return View();
         }
 
+
+
+
         //
         // POST: /Account/Register
         [HttpPost]
@@ -151,19 +234,25 @@ namespace IntegratedProject3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new Account
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Surname = model.Surname,
+                    FirstName = model.FirstName,
+                    PhoneNumber = model.Phone,
+                    AccountType = model.Type
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("List", "Account");
                 }
                 AddErrors(result);
             }
