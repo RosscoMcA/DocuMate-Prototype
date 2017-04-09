@@ -11,9 +11,6 @@ namespace IntegratedProject3.Models
         public double RevisionNum { get; set; }
         public string DocumentTitle { get; set; }
         
-       
-
-
     }
 
     /// <summary>

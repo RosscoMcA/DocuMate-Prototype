@@ -45,18 +45,13 @@
         <dt>
             @Html.DisplayNameFor(model => model.Distributees)
         </dt>
-
+        @foreach (var item in Model.Distributees)
+        {
         <dd>
-            @Html.DisplayFor(model => model.Distributees)
+            @Html.DisplayFor(model => item.FirstName)
+            @Html.DisplayFor(model => item.Surname)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.File)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.File)
-        </dd>
+        }
 
     </dl>
 </div>

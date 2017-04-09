@@ -42,8 +42,8 @@
             @Html.DisplayFor(modelItem => item.Surname)
         </td>
         <td>
-            @Html.ActionLink("Add New Distributee", "AddNewDistributee", "Revisions", new { userKey = item.Id, revID = Model.RevID }, null) 
-          
+            @Html.ActionLink("Add New Distributee", "AddNewDistributee", "Revisions", new { userKey = item.Id, revID = Model.RevID }, null) |
+            @Html.ActionLink("Remove Distributee", "RemoveDistributee", "Revisions", new { userKey = item.Id, revID = Model.RevID}, null)
         </td>
     </tr>
 }

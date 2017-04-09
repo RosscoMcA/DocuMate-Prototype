@@ -10,6 +10,7 @@ using IntegratedProject3.Models;
 using Microsoft.AspNet.Identity;
 using System.Web.Security;
 using System.Data.Entity.Migrations;
+using IntegratedProject3.Extensions;
 
 namespace IntegratedProject3.Controllers
 {
@@ -155,14 +156,42 @@ namespace IntegratedProject3.Controllers
                     revision.Distributees.Add(user);
                     db.Revisions.AddOrUpdate(revision);
                     db.SaveChanges();
+                    this.AddNotification("Distributee added", NotificationType.SUCCESS);
                 }
                 else
                 {
-                    //Insert Notification here
+                    this.AddNotification("Distributee already added", NotificationType.ERROR);
+
                 }
             }
 
-            return RedirectToAction("SelectUsers", "Revisions", new { revID } );
+            return RedirectToAction("SelectUsers", "Revisions", revID );
+
+        }
+
+        public ActionResult RemoveDistributee(string userKey, string revID)
+        {
+            var revision = db.Revisions.Where(r => r.id == revID).SingleOrDefault();
+
+            var user = db.Accounts.Find(userKey);
+            if (user != null && revision != null)
+            {
+                var contained = revision.Distributees.Contains(user);
+                if (contained == true)
+                {
+                    revision.Distributees.Remove(user);
+                    db.Revisions.AddOrUpdate(revision);
+                    db.SaveChanges();
+                    this.AddNotification("Distributee removed", NotificationType.SUCCESS);
+                }
+                else
+                {
+                    this.AddNotification("Distributee not assigned to this revision", NotificationType.ERROR);
+                }
+
+            }
+
+            return RedirectToAction("SelectUsers", "Revisions", revID );
 
         }
 
