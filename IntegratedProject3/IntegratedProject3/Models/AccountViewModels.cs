@@ -15,6 +15,40 @@ namespace IntegratedProject3.Models
         public string ReturnUrl { get; set; }
     }
 
+    /// <summary>
+    /// Handles the data to be shown in account list view
+    /// </summary>
+    public class AccountListModel
+    {
+        public string ID { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        [Display(Name = "Type")]
+        public AccountType type { get; set; }
+
+        /// <summary>
+        /// Assiggns values to the Account List View Model
+        /// </summary>
+
+        public static Expression<Func<Account, AccountListModel>> ViewModel
+        {
+            get
+            {
+                return acc => new AccountListModel()
+                {
+                    ID = acc.Id,
+                    FirstName = acc.FirstName,
+                    Surname = acc.Surname,
+                    Email = acc.Email,
+                    type = acc.AccountType
+                };
+            }
+
+        }
+
+    }
+
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }
@@ -49,9 +83,8 @@ namespace IntegratedProject3.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -62,18 +95,70 @@ namespace IntegratedProject3.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    /// <summary>
+    /// Handles the details of editing an account 
+    /// </summary>
+    public class AccountEditModel
     {
+        [Required]
+        public string ID { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Phone]
+        public string Phone { get; set; }
+
+        [Required]
+        public string Surname { get; set; }
+
+        [Required]
+        public AccountType Type { get; set; }
+
+    }
+
+
+    /// <summary>
+    /// Handles the creation of users within te system.
+    /// </summary>
+    public class RegisterViewModel
+    {
+
+        public string ID { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string Surname { get; set; }
+
+        [Required]
+        [Phone]
+        public string Phone { get; set; }
+
+        [Required]
+        public AccountType Type { get; set; }
+
+
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
+
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
