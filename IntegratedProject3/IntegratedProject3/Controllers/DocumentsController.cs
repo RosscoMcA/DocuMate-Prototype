@@ -52,12 +52,13 @@ namespace IntegratedProject3.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 document.id = Guid.NewGuid().ToString();
                 string userId = User.Identity.GetUserId();
                 document.Author = db.Accounts.Find(userId);
                 db.Documents.Add(document);
                 db.SaveChanges();
-                return RedirectToAction("Create", "Revisions", new { id = document.id });
+                return RedirectToAction("Create", "Revisions", new { docId = document.id });
             }
 
             return View(document);

@@ -46,13 +46,12 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revisions revisions, string id)
+        public ActionResult Create([Bind(Include = "id,RevisionNum,DocumentTitle,DocCreationDate,State,ActivationDate")] Revisions revisions, string docId)
         {
-            ViewBag.id = id;
-        
+                    
             if (ModelState.IsValid)
             {
-                revisions.document.id = id;
+                revisions.document = db.Documents.Where(doc => doc.id == docId).SingleOrDefault();
                 revisions.id = Guid.NewGuid().ToString();
                 db.Revisions.Add(revisions);
                 db.SaveChanges();

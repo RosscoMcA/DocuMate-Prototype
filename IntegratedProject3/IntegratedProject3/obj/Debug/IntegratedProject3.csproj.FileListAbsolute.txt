@@ -176,7 +176,6 @@ C:\Users\darkp\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Ow
 C:\Users\darkp\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache
 C:\Users\darkp\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.dll
 C:\Users\darkp\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.pdb
-C:\Users\nclel\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache
 C:\Users\nclel\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.dll
 C:\Users\nclel\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.pdb
 C:\Users\nclel\ip3project\IntegratedProject3\IntegratedProject3\bin\roslyn\csc.exe
@@ -354,3 +353,4 @@ C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Ow
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.pdb
+C:\Users\nclel\ip3project\IntegratedProject3\IntegratedProject3\obj\Debug\IntegratedProject3.csprojResolveAssemblyReference.cache
