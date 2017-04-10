@@ -1,22 +1,26 @@
 ﻿@model IEnumerable<IntegratedProject3.Models.Document>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Documents";
 }
 
-<h2>Index</h2>
+<h2>Documents</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a href="/Documents/Create" class="btn btn-primary btn-lg">Create New Document</a>
 </p>
 <table class="table">
     <tr>
-        <th></th>
+        <th class="th">Document Title</th>
+        <th class="th">Revision</th>
+        <th class="th">Header</th>
+
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td class="td">TestDoc</td>
+        <td class="td">
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ID })
@@ -25,3 +29,4 @@
 }
 
 </table>
+
