@@ -9,12 +9,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using IntegratedProject3.Models;
+using System.Data.Entity.Migrations;
 
 namespace IntegratedProject3.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -58,7 +60,7 @@ namespace IntegratedProject3.Controllers
         /// <returns>A list of all users if an admin is using the system</returns>
         public ActionResult List()
         {
-            if (this.isAdmin() == false)
+            //if (this.isAdmin() == false)
             {
                 return RedirectToAction("Index", "Home");
             }
