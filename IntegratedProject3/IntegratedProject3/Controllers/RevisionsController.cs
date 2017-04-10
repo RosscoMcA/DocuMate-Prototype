@@ -68,9 +68,9 @@ namespace IntegratedProject3.Controllers
 
         // GET: Revisions/Create
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(string id)
         {
-            string id = "f4d80ac9-1358-459f-b3af-b6cdbe34da82";
+            
             var document = db.Documents.Where(d => d.id == id).SingleOrDefault();
             if (document != null)
             {
@@ -91,13 +91,13 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Create([Bind(Include = "id, RevisionNum,DocumentTitle")] RevisonViewModel revision)
+        public ActionResult Create([Bind(Include = "DocID, RevisionNum,DocumentTitle")] RevisonViewModel revision)
         {
 
                 if (ModelState.IsValid)
                 {
-                string id = "f4d80ac9-1358-459f-b3af-b6cdbe34da82";
-                var doc = db.Documents.Where(d => d.id == id).SingleOrDefault();
+                
+                var doc = db.Documents.Where(d => d.id == revision.DocID).SingleOrDefault();
                 Revision newRevision = new Revision()
                 {
                     id = Guid.NewGuid().ToString(),
@@ -169,6 +169,12 @@ namespace IntegratedProject3.Controllers
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userKey"></param>
+        /// <param name="revID"></param>
+        /// <returns></returns>
         public ActionResult RemoveDistributee(string userKey, string revID)
         {
             var revision = db.Revisions.Where(r => r.id == revID).SingleOrDefault();
