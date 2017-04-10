@@ -5,7 +5,7 @@ using System.Web;
 
 namespace IntegratedProject3.Models
 {
-    public class RevisonViewModel
+    public class RevisionViewModel
     {
         public string DocID { get; set; }
         public double RevisionNum { get; set; }

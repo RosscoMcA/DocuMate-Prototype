@@ -184,7 +184,7 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Revision.cs" />
-    <Compile Include="Models\RevisonViewModel.cs" />
+    <Compile Include="Models\RevisionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
