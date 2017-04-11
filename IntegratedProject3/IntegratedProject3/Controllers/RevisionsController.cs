@@ -80,7 +80,7 @@ namespace IntegratedProject3.Controllers
         /// <returns></returns>
         [Authorize]
         public ActionResult Create(string id)
-        {
+      {
             //Retrieves enumerable of all accounts.
             IEnumerable<Account> accounts = db.Accounts.ToList();
 
@@ -141,12 +141,12 @@ namespace IntegratedProject3.Controllers
                 // Files is looking for the corresponding ID in the view
                 HttpPostedFileBase file = Request.Files["document"];
 
-                if (file != null)
-                {
-                    FileStoreService fss = new FileStoreService();
+                //if (file != null)
+                //{
+                //    FileStoreService fss = new FileStoreService();
 
-                    revision.FileStoreKey = fss.UploadFile(file);
-                }
+                 //   revision.FileStoreKey = fss.UploadFile(file);
+                //}
 
                 //New revision to be added to the database
                 Revision newRevision = new Revision()
@@ -237,7 +237,7 @@ namespace IntegratedProject3.Controllers
             }
 
             //Redirects to a new instance of distributee list so user can add other distributees.
-            return RedirectToAction("SelectUsers", "Revisions", revID );
+            return RedirectToAction("SelectUsers", "Revisions", new { id = revID });
 
         }
 
@@ -280,7 +280,7 @@ namespace IntegratedProject3.Controllers
 
             //Redirect to distributee list so user can manage other distributees.
             
-            return RedirectToAction("SelectUsers", "Revisions", revID );
+            return RedirectToAction("SelectUsers", "Revisions", new { id = revID });
 
         }
 

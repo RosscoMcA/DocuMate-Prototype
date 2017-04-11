@@ -57,7 +57,7 @@ namespace IntegratedProject3.Controllers
                 document.Author = db.Accounts.Find(userId);
                 db.Documents.Add(document);
                 db.SaveChanges();
-                return RedirectToAction("Create", "Revisions", new { docId = document.id });
+                return RedirectToAction("Create", "Revisions", new { id = document.id });
             }
 
             return View(document);
