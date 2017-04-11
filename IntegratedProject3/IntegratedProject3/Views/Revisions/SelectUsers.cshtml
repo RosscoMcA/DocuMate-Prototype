@@ -1,0 +1,54 @@
+﻿@model IntegratedProject3.Models.DistributeeSelectModel
+
+@{
+    ViewBag.Title = "SelectUsers";
+}
+
+<h2>Select Users</h2>
+
+
+<table class="table">
+    <tr>
+        @Html.HiddenFor(model=> model.RevID)
+        <th>
+            @Html.DisplayNameFor(model => model.Accounts.FirstOrDefault().UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Accounts.FirstOrDefault().AccountType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Accounts.FirstOrDefault().FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Accounts.FirstOrDefault().Surname)
+        </th>
+        <th></th>
+    </tr>
+ 
+@foreach (var item in Model.Accounts)
+{
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountType)
+        </td>
+        <td>
+           @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Surname)
+        </td>
+        <td>
+            @Html.ActionLink("Add New Distributee", "AddNewDistributee", "Revisions", new { userKey = item.Id, revID = Model.RevID }, null) |
+            @Html.ActionLink("Remove Distributee", "RemoveDistributee", "Revisions", new { userKey = item.Id, revID = Model.RevID}, null)
+        </td>
+    </tr>
+}
+  
+
+    @Html.ActionLink("Index", "Index", "Home")
+
+</table>

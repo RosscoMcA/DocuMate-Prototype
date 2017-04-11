@@ -16,11 +16,12 @@ namespace IntegratedProject3.Models
 
         public string Surname { get; set; }
 
+
     }
     /// <summary>
     /// ENUM Representation of the system 
     /// </summary>
-    public enum AccountType { Author, Admin, Distributee}
+    public enum AccountType { Author, Admin, Distributee, Archived}
 
     
 }
