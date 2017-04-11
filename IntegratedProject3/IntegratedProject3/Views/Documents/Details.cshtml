@@ -7,12 +7,55 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Document</h4>
+    <h4>Documents</h4>
     <hr />
     <dl class="dl-horizontal">
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Create New", "Create", "Revisions", new { id = Model.id }, null)
 </p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayText("Document Title")
+        </th>
+        <th>
+            @Html.DisplayText("Document Creation Date")
+        </th>
+        <th>
+            @Html.DisplayText("State")
+        </th>
+        <th>
+            @Html.DisplayText("Activation Date")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Revisions)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocCreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivationDate)
+            </td>
+            <td>
+                
+                @Html.ActionLink("Edit", "Edit", "Revisions", new { id = item.id }, null) |
+                @Html.ActionLink("Details", "Details", "Revisions", new { id = item.id }, null) |
+                @Html.ActionLink("Delete", "Delete", "Revisions", new { id = item.id }, null)
+            </td>
+        </tr>
+    }
+
+</table>
+

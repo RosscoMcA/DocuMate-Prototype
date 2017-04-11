@@ -1,4 +1,4 @@
-﻿@model IntegratedProject3.Models.RevisonViewModel
+﻿@model IntegratedProject3.Models.RevisionViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -31,9 +31,9 @@
                     @Html.ValidationMessageFor(model => model.DocumentTitle, "", new { @class = "text-danger" })
                 </div>
             </div>
+
+            @Html.HiddenFor(model => model.DocID)
             
-            
-           
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" class="btn btn-default" />

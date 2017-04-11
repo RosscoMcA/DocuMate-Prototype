@@ -12,14 +12,16 @@
 <table class="table">
     <tr>
         <th class="th">Document Title</th>
-        <th class="th">Revision</th>
-        <th class="th">Header</th>
+        <th class="th">Revision Number</th>
+        <th class="th">Creation Date</th>
+        <th class="th">Activation Date</th>
 
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        
+        <td>            
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
             @Html.ActionLink("Details", "Details", new { id=item.id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.id })

@@ -52,7 +52,6 @@ namespace IntegratedProject3.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 document.id = Guid.NewGuid().ToString();
                 string userId = User.Identity.GetUserId();
                 document.Author = db.Accounts.Find(userId);
@@ -115,6 +114,8 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+
+            EmailService emailService = new EmailService();
             Document document = db.Documents.Find(id);
             db.Documents.Remove(document);
             db.SaveChanges();

@@ -120,7 +120,7 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Create([Bind(Include = "DocID, RevisionNum,DocumentTitle")] RevisionViewModel revision)
+        public ActionResult Create([Bind(Include = "DocID, RevisionNum, DocumentTitle, Distributees")] RevisionViewModel revision)
         {
 
                 if (ModelState.IsValid)
@@ -128,6 +128,13 @@ namespace IntegratedProject3.Controllers
                 
                 //Retrieves the document from the revision being created.
                 var doc = db.Documents.Where(d => d.id == revision.DocID).SingleOrDefault();
+                var latestRevision = db.Revisions.Where(r => r.document.id == doc.id && r.State == DocumentState.Active).SingleOrDefault();
+                var distributees = new HashSet<Account>();
+
+                if(latestRevision != null)
+                {
+                    distributees = (HashSet<Account>)latestRevision.Distributees;
+                }
 
                 //New revision to be added to the database
                 Revision newRevision = new Revision()
@@ -144,7 +151,7 @@ namespace IntegratedProject3.Controllers
                     //Revision's document set to the document queryed from database.
                     document = doc,
                     //New empty hash of Accounts.
-                    Distributees = new HashSet<Account>()
+                    Distributees = distributees
 
                };
 
@@ -199,6 +206,14 @@ namespace IntegratedProject3.Controllers
                     db.SaveChanges();
                     // User notification stating "Distrbutee added" to the revision.
                     this.AddNotification("Distributee added", NotificationType.SUCCESS);
+
+                    //Emailing updated status to distributees
+                    EmailService emailService = new EmailService();
+                    emailService.massMessageDistribution(revision.Distributees, 1);
+
+                    //Texting updated status to distributees
+                    //SMSService smsService = new SMSService();
+                    //smsService.DetermineSMSMessage(revision.Distributees, 1);
                 }
                 else
                 {
@@ -274,20 +289,21 @@ namespace IntegratedProject3.Controllers
             //If the revision is "Active"
             if (revision.State == DocumentState.Active)
             {
-                throw new Exception("Only draft documents can be edited. Please create a new revision.");
+                this.AddNotification("Cannot edit Active documents, please create a new revision.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
 
             //If no revision is found, redirect to Revisions/Index
             if (revision == null)
             {
-                return RedirectToAction("Index", "Revisions");
+                return RedirectToAction("Index", "Home");
             }
 
             // If the current user is not the author of the revision.
             if (!(VerifyAuthor(revision)))
             {
                 new Exception("current user is not author of the document");
-                return RedirectToAction("index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(revision);
@@ -348,7 +364,8 @@ namespace IntegratedProject3.Controllers
             // Verifies the current user is the author of the revision.
             if (!(VerifyAuthor(revision)))
             {
-                throw new Exception("Only the author can delete a revision.");
+                this.AddNotification("Only the author can delete a revision.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
 
             return View(revision);
@@ -387,6 +404,14 @@ namespace IntegratedProject3.Controllers
                 // Sets each revisions created by author to "Archived"
                 foreach (var revision in authorRevisions)
                 {
+                    //Emailing updated status to distributees
+                    EmailService emailService = new EmailService();
+                    emailService.massMessageDistribution(revision.Distributees, 2);
+
+                    //Texting updated status to distributees
+                    //SMSService smsService = new SMSService();
+                    //smsService.DetermineSMSMessage(revision.Distributees, 2);
+
                     revision.State = DocumentState.Archived;
                     db.Revisions.AddOrUpdate(revision);
                     db.SaveChanges();

@@ -12,10 +12,7 @@ namespace IntegratedProject3.Controllers
     /// </summary>
     public class EmailService
     {
-       
-  
-
-
+    
             /// <summary>
             /// Handles the distribution of a message to all applicable users
             /// </summary>
