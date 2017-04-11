@@ -17,7 +17,7 @@ namespace IntegratedProject3.Models
         /// 
         public IDbSet<Account>Accounts { get; set; }
         public IDbSet<Document>Documents { get; set; }
-        public IDbSet<Revisions>Revisions { get; set; }
+        public IDbSet<Revision>Revisions { get; set; }
 
         public ApplicationDbContext()
             : base("IP3", throwIfV1Schema: false)

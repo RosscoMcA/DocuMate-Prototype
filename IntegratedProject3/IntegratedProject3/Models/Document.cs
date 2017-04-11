@@ -23,13 +23,8 @@ namespace IntegratedProject3.Models
         /// </summary>
         public virtual Account Author { get; set; }
 
-<<<<<<< HEAD
-        public virtual ICollection<Revisions>Revisions { get; set; }
-||||||| merged common ancestors
-        public virtual ICollection<Version>Versions { get; set; }
-=======
         public virtual ICollection<Revision>Revisions { get; set; }
->>>>>>> version
+
     }
 
 }

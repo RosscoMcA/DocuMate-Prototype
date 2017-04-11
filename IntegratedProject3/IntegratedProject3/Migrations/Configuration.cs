@@ -115,7 +115,7 @@ namespace IntegratedProject3.Migrations
                         Author = author
                     };
 
-                    Models.Revisions v1 = new Models.Revisions
+                    Models.Revision v1 = new Models.Revision
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Test Document",
@@ -127,7 +127,7 @@ namespace IntegratedProject3.Migrations
                         Distributees = new Collection<Account>()
                     };
 
-                    Models.Revisions v2 = new Models.Revisions
+                    Models.Revision v2 = new Models.Revision
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "New Test Document",

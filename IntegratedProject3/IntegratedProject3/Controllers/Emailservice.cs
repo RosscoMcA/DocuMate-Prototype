@@ -10,7 +10,7 @@ namespace IntegratedProject3.Controllers
     /// <summary>
     /// Email Messaging Service, handles all interactions and processes that occur with the email service.
     /// </summary>
-    public class Emailservice
+    public class EmailService
     {
        
   
@@ -30,7 +30,7 @@ namespace IntegratedProject3.Controllers
                     im.Destination = distributee.Email;
                     im.Subject = "DocuMate Notification";
 
-                    EmailService es = new EmailService();
+                IntegratedProject3.EmailService es = new IntegratedProject3.EmailService();
 
                     es.SendAsync(im);
                 }
