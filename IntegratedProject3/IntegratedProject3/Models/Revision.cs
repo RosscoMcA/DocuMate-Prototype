@@ -69,7 +69,10 @@ namespace IntegratedProject3.Models
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime? ActivationDate { get; set; }
 
-        
+        /// <summary>
+        /// Key for revisions file stored on the Amazon File Store Service
+        /// </summary>
+        public string fileStoreKey { get; set; }
 
     }
 

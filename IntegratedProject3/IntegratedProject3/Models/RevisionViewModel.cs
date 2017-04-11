@@ -10,6 +10,7 @@ namespace IntegratedProject3.Models
         public string DocID { get; set; }
         public double RevisionNum { get; set; }
         public string DocumentTitle { get; set; }
+        public string FileStoreKey { get; set; }
         
     }
 

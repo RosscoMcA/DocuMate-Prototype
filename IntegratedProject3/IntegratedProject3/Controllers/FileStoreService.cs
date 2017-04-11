@@ -10,7 +10,7 @@ namespace IntegratedProject3.Controllers
 {
     public class FileStoreService
     {
-        private const string bucketName = "cwkTest";
+        private const string bucketName = "cwktest";
         private const string AWS_ACCESS_KEY = "";
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace IntegratedProject3.Controllers
         /// </summary>
         /// <param name="file">The File to be Stored</param>
         /// <returns>returns the key to be stored</returns>
-        public string UploadFile(HttpPostedFile file)
+        public string UploadFile(HttpPostedFileBase file)
         {
             var client = new AmazonS3Client(Amazon.RegionEndpoint.EUWest1);
 
@@ -26,7 +26,7 @@ namespace IntegratedProject3.Controllers
             {
                 PutObjectRequest putRequest = new PutObjectRequest
                 {
-                    CannedACL = S3CannedACL.PublicReadWrite,
+                    CannedACL = S3CannedACL.PublicRead,
                     BucketName = bucketName,
                     Key = Guid.NewGuid().ToString(),
                     InputStream = file.InputStream,

@@ -120,7 +120,7 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Create([Bind(Include = "DocID, RevisionNum, DocumentTitle, Distributees")] RevisionViewModel revision)
+        public ActionResult Create([Bind(Include = "DocID, RevisionNum, DocumentTitle, Distributees, File")] RevisionViewModel revision)
         {
 
                 if (ModelState.IsValid)
@@ -134,6 +134,18 @@ namespace IntegratedProject3.Controllers
                 if(latestRevision != null)
                 {
                     distributees = (HashSet<Account>)latestRevision.Distributees;
+                }
+
+                string directory = @"D:\Temp\";
+
+                // Files is looking for the corresponding ID in the view
+                HttpPostedFileBase file = Request.Files["document"];
+
+                if (file != null)
+                {
+                    FileStoreService fss = new FileStoreService();
+
+                    revision.FileStoreKey = fss.UploadFile(file);
                 }
 
                 //New revision to be added to the database
@@ -151,7 +163,8 @@ namespace IntegratedProject3.Controllers
                     //Revision's document set to the document queryed from database.
                     document = doc,
                     //New empty hash of Accounts.
-                    Distributees = distributees
+                    Distributees = distributees,
+                    fileStoreKey = revision.FileStoreKey
 
                };
 
