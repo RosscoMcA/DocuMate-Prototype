@@ -8,14 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using IntegratedProject3.Models;
 using System.IO;
+using Microsoft.AspNet.Identity;
 
 namespace IntegratedProject3.Controllers
 {
     public class DocumentsController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-        ApplicationDbContext db = new ApplicationDbContext();
-        
         // GET: Documents
         public ActionResult Index()
         {
@@ -23,7 +23,7 @@ namespace IntegratedProject3.Controllers
         }
 
         // GET: Documents/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -48,20 +48,24 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID")] Document document)
+        public ActionResult Create([Bind(Include = "id")] Document document)
         {
             if (ModelState.IsValid)
             {
+
+                document.id = Guid.NewGuid().ToString();
+                string userId = User.Identity.GetUserId();
+                document.Author = db.Accounts.Find(userId);
                 db.Documents.Add(document);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Revisions", new { docId = document.id });
             }
 
             return View(document);
         }
 
         // GET: Documents/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -80,7 +84,7 @@ namespace IntegratedProject3.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID")] Document document)
+        public ActionResult Edit([Bind(Include = "id")] Document document)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +96,7 @@ namespace IntegratedProject3.Controllers
         }
 
         // GET: Documents/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
@@ -109,7 +113,7 @@ namespace IntegratedProject3.Controllers
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
             Document document = db.Documents.Find(id);
             db.Documents.Remove(document);

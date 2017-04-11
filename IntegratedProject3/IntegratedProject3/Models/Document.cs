@@ -26,5 +26,4 @@ namespace IntegratedProject3.Models
         public virtual ICollection<Revisions>Revisions { get; set; }
     }
 
-    
 }
