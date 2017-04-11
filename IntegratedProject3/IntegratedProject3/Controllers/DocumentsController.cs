@@ -131,32 +131,7 @@ namespace IntegratedProject3.Controllers
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Allows the user to dowload the file given
-        /// </summary>
-        /// <param name="docKey">They key of the file to be downloaded</param>
-        /// <returns>The file to download if successful, otherwise nothing</returns>
-        public FileResult Download(string docKey)
-        {
-            FileStoreService fss = new FileStoreService();
-
-            var file = fss.GetFile(docKey);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                if (file != null)
-                {
-
-                    file.CopyTo(memoryStream);
-                    byte[] fileBytes = memoryStream.ToArray();
-                    return File(fileBytes, "application/unknown", "Test");
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+       
 
     }
 }

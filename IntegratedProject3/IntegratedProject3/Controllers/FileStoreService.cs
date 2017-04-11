@@ -67,7 +67,7 @@ namespace IntegratedProject3.Controllers
                     Key = key
                 };
 
-                GetObjectResponse response = client.GetObject(request);
+                var response = client.GetObject(request);
 
                 return response.ResponseStream;
             }

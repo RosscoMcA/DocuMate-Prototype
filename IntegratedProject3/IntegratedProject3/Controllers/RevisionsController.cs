@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using System.Web.Security;
 using System.Data.Entity.Migrations;
 using IntegratedProject3.Extensions;
+using System.IO;
 
 namespace IntegratedProject3.Controllers
 {
@@ -141,12 +142,12 @@ namespace IntegratedProject3.Controllers
                 // Files is looking for the corresponding ID in the view
                 HttpPostedFileBase file = Request.Files["document"];
 
-                //if (file != null)
-                //{
-                //    FileStoreService fss = new FileStoreService();
+                if(file != null)
+                {
+                   FileStoreService fss = new FileStoreService();
 
-                 //   revision.FileStoreKey = fss.UploadFile(file);
-                //}
+                   revision.FileStoreKey = fss.UploadFile(file);
+                }
 
                 //New revision to be added to the database
                 Revision newRevision = new Revision()
@@ -433,6 +434,33 @@ namespace IntegratedProject3.Controllers
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Allows the user to dowload the file given
+        /// </summary>
+        /// <param name="docKey">They key of the file to be downloaded</param>
+        /// <returns>The file to download if successful, otherwise nothing</returns>
+        public FileResult Download(string docKey)
+        {
+            FileStoreService fss = new FileStoreService();
+
+            var file = fss.GetFile(docKey);
+            var document = db.Revisions.Where(r => r.fileStoreKey == docKey).SingleOrDefault();
+            using (var memoryStream = new MemoryStream())
+            {
+                if (file != null)
+                {
+
+                    file.CopyTo(memoryStream);
+                    byte[] fileBytes = memoryStream.ToArray();
+                    return File(fileBytes, "application/unknown", document.DocumentTitle);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)
