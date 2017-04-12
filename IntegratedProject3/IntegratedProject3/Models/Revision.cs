@@ -39,11 +39,13 @@ namespace IntegratedProject3.Models
         /// <summary>
         ///  Revision identifer 
         /// </summary>
+        [Display(Name = "Revision Number")]
         public double RevisionNum { get; set; }
 
         /// <summary>
         /// Title of the document 
         /// </summary>
+        [Display(Name = "Document Title")]
         public string DocumentTitle { get; set; }
         
         /// <summary>
@@ -51,6 +53,7 @@ namespace IntegratedProject3.Models
         /// </summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString ="{0:d}", ApplyFormatInEditMode =true)]
+        [Display(Name = "Creation Date")]
         public DateTime DocCreationDate { get; set; }
         
         /// <summary>
@@ -67,6 +70,7 @@ namespace IntegratedProject3.Models
         /// </summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Activation Date")]
         public DateTime? ActivationDate { get; set; }
 
         /// <summary>

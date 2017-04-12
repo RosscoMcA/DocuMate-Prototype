@@ -4,10 +4,9 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Revisions</h2>
 
 <div>
-    <h4>Documents</h4>
     <hr />
     <dl class="dl-horizontal">
     </dl>
@@ -19,16 +18,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayText("Document Title")
+            @Html.DisplayNameFor(model => model.Revisions.SingleOrDefault().DocumentTitle)
         </th>
         <th>
-            @Html.DisplayText("Document Creation Date")
+            @Html.DisplayNameFor(model => model.Revisions.SingleOrDefault().DocCreationDate)
         </th>
         <th>
-            @Html.DisplayText("State")
+            @Html.DisplayNameFor(model => model.Revisions.SingleOrDefault().State)
         </th>
         <th>
-            @Html.DisplayText("Activation Date")
+            @Html.DisplayNameFor(model => model.Revisions.SingleOrDefault().ActivationDate)
         </th>
         <th></th>
     </tr>

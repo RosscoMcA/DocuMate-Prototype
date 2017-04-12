@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +9,9 @@ namespace IntegratedProject3.Models
     public class RevisionViewModel
     {
         public string DocID { get; set; }
+        [Display(Name = "Revision Number")]
         public double RevisionNum { get; set; }
+        [Display(Name = "Document Title")]
         public string DocumentTitle { get; set; }
         public string FileStoreKey { get; set; }
         

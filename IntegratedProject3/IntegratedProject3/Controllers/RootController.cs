@@ -27,6 +27,12 @@ namespace IntegratedProject3.Controllers
 
         }
 
+        public bool VerifyAuthor(Document document)
+        {
+            var currentUser = getAccount();
+            return (currentUser.Id == document.Author.Id);
+        }
+
         /// <summary>
         /// Checks the document state is "Draft".
         /// </summary>

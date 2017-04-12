@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -10,13 +12,13 @@ namespace IntegratedProject3.Models
     /// </summary>
     public class Account:ApplicationUser
     {
+        
         public AccountType AccountType { get; set; }
-
+        
         public string FirstName { get; set; }
 
         public string Surname { get; set; }
-
-
+        
     }
     /// <summary>
     /// ENUM Representation of the system 

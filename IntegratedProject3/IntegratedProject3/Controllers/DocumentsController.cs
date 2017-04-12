@@ -9,12 +9,12 @@ using System.Web.Mvc;
 using IntegratedProject3.Models;
 using System.IO;
 using Microsoft.AspNet.Identity;
+using IntegratedProject3.Extensions;
 
 namespace IntegratedProject3.Controllers
 {
-    public class DocumentsController : Controller
+    public class DocumentsController : RootController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
 
         /// <summary>
         /// List all the documents in the system. Only accessible to the admin.
@@ -22,29 +22,49 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of all documents</returns>
         public ActionResult Index()
         {
-            var doc = db.Documents.ToList();
-            var docView = new HashSet<DocumentViewModel>();
-            foreach (var singleDoc in doc)
+
+            if (isAuthor())
             {
-                if (singleDoc.Revisions != null)
+
+                var userId = User.Identity.GetUserId();
+                var doc = db.Documents.Where(d => d.Author.Id == userId).ToList();
+                var docView = new HashSet<DocumentViewModel>();
+                foreach (var singleDoc in doc)
                 {
-                    var revision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Active).SingleOrDefault();
-                    if (revision != null)
+                    if (singleDoc.Revisions != null)
                     {
-                        var newDoc = new DocumentViewModel()
+                        var revision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Active).SingleOrDefault();
+                        if (revision != null)
                         {
-                            id = singleDoc.id,
-                            ActivationDate = revision.ActivationDate.Value,
-                            Author = singleDoc.Author,
-                            DocCreationDate = revision.DocCreationDate,
-                            DocumentTitle = revision.DocumentTitle,
-                            RevisionNum = revision.RevisionNum
-                        };
-                        docView.Add(newDoc);
+                            var newDoc = new DocumentViewModel()
+                            {
+                                id = singleDoc.id,
+                                ActivationDate = revision.ActivationDate.Value,
+                                Author = singleDoc.Author,
+                                DocCreationDate = revision.DocCreationDate,
+                                DocumentTitle = revision.DocumentTitle,
+                                RevisionNum = revision.RevisionNum
+                            };
+                            docView.Add(newDoc);
+                        }
                     }
                 }
+                return View(docView.ToList());
+
             }
-            return View(docView.ToList());
+            
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
+        }
+
+        /// <summary>
+        /// List of all documents.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AdminDocuments()
+        {
+            var documents = db.Documents.ToList();
+            return View(documents);
         }
 
         /// <summary>
@@ -54,17 +74,24 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of a specific document's revisions</returns>
         public ActionResult Details(string id)
         {
-            if (id == null)
+            var document = db.Documents.Find(id);
+            if (VerifyAuthor(document))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (document == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(document);
+
             }
-            // Finds the specified document using the ID.
-            Document document = db.Documents.Find(id);
-            if (document == null)
-            {
-                return HttpNotFound();
-            }
-            return View(document);
+
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         
@@ -76,20 +103,27 @@ namespace IntegratedProject3.Controllers
         
         public ActionResult Create([Bind(Include = "id")] Document document)
         {
-            if (ModelState.IsValid)
+            if (isAuthor())
             {
-                //Auto generated ID
-                document.id = Guid.NewGuid().ToString();
-                //Sets the document's author to the current user.
-                document.Author = db.Accounts.Find(User.Identity.GetUserId());
-                //Saves the document to the database.
-                db.Documents.Add(document);
-                db.SaveChanges();
-                //Redirects the Revision/Create so the author can create the first revision for the document.
-                return RedirectToAction("Create", "Revisions", new { id = document.id });
+
+                if (ModelState.IsValid)
+                {
+                    //Auto generated ID
+                    document.id = Guid.NewGuid().ToString();
+                    //Sets the document's author to the current user.
+                    document.Author = db.Accounts.Find(User.Identity.GetUserId());
+                    //Saves the document to the database.
+                    db.Documents.Add(document);
+                    db.SaveChanges();
+                    //Redirects the Revision/Create so the author can create the first revision for the document.
+                    return RedirectToAction("Create", "Revisions", new { id = document.id });
+                }
+
+                return View(document);
             }
 
-            return View(document);
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         /// <summary>
@@ -99,17 +133,23 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of Document/Edit</returns>
         public ActionResult Edit(string id)
         {
-            if (id == null)
+            var document = db.Documents.Find(id);
+            if (VerifyAuthor(document))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                if (document == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(document);
             }
-            //Finds the specficied document.
-            Document document = db.Documents.Find(id);
-            if (document == null)
-            {
-                return HttpNotFound();
-            }
-            return View(document);
+
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         /// <summary>
@@ -121,13 +161,19 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id")] Document document)
         {
-            if (ModelState.IsValid)
+            if (VerifyAuthor(document))
             {
-                db.Entry(document).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(document).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(document);
             }
-            return View(document);
+
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         /// <summary>
@@ -137,16 +183,23 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of Document Delete</returns>
         public ActionResult Delete(string id)
         {
-            if (id == null)
+            var document = db.Documents.Find(id);
+            if (VerifyAuthor(document))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+               
+                if (document == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(document);
             }
-            Document document = db.Documents.Find(id);
-            if (document == null)
-            {
-                return HttpNotFound();
-            }
-            return View(document);
+
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         /// <summary>
@@ -158,15 +211,20 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            //New instance of email service.
-            EmailService emailService = new EmailService();
-            //Find the specified document.
-            Document document = db.Documents.Find(id);
-            //Removes the document from the database.
-            db.Documents.Remove(document);
-            db.SaveChanges();
-            //Redirects to Document/Index
-            return RedirectToAction("Index");
+            var document = db.Documents.Find(id);
+            if (VerifyAuthor(document))
+            {
+                //New instance of email service.
+                EmailService emailService = new EmailService();
+                //Removes the document from the database.
+                db.Documents.Remove(document);
+                db.SaveChanges();
+                //Redirects to Document/Index
+                return RedirectToAction("Index");
+            }
+
+            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+            return View("Home", "Index");
         }
 
         protected override void Dispose(bool disposing)
