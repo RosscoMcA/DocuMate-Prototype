@@ -52,8 +52,12 @@
             @Html.DisplayFor(model => item.Surname)
         </dd>
         }
-
-        @Html.ActionLink("Download", "Download",new { docKey = Model.fileStoreKey})
+        <dt>
+            Document
+        </dt>
+        <dd>
+            @Html.ActionLink("Download", "Download", new { docKey = Model.fileStoreKey })
+        </dd>
 
     </dl>
 </div>

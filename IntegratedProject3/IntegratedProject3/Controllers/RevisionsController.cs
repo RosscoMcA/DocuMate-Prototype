@@ -19,7 +19,7 @@ namespace IntegratedProject3.Controllers
     {
         
         /// <summary>
-        /// Retrieves the Revisions Index. Displaying all revisions.
+        /// Retrieves the Revisions Index. Displaying all revisions. Accessible to admins.
         /// </summary>
         /// <returns>ViewResult containing a list of Revisions.</returns>
         [Authorize]
@@ -28,6 +28,15 @@ namespace IntegratedProject3.Controllers
             var revisions = db.Revisions.ToList();
             return View(revisions);
         }
+
+        //Index shows all the active revisions accessible by the user. Distributees and Authors should have access.
+        public ActionResult ActiveRevisions()
+        {
+            return View();
+        }
+
+
+        //DocumentRevisions will show all the revisions associated with a given document. Accessible by the Author of the document.
 
         /// <summary>
         /// Retrieves revisions associated with a specific document.
@@ -52,6 +61,9 @@ namespace IntegratedProject3.Controllers
             return View(revisions.ToList());
         }
 
+    
+        //Accessible by distributees and author associated with the revision.
+
         /// <summary>
         /// Displays the details of the selected revision.
         /// </summary>
@@ -73,6 +85,8 @@ namespace IntegratedProject3.Controllers
             }
             return View(revision);
         }
+
+        // Only accessible to the author of the document
 
         /// <summary>
         /// Retrives the Revision/Create page.
@@ -113,6 +127,8 @@ namespace IntegratedProject3.Controllers
             return View();
         }
 
+        // Only accessible to the author of the specific document.
+
         /// <summary>
         /// Saves new revision added through the Revision/Create page.
         /// </summary>
@@ -136,8 +152,6 @@ namespace IntegratedProject3.Controllers
                 {
                     distributees = (HashSet<Account>)latestRevision.Distributees;
                 }
-
-                string directory = @"D:\Temp\";
 
                 // Files is looking for the corresponding ID in the view
                 HttpPostedFileBase file = Request.Files["document"];
@@ -180,6 +194,8 @@ namespace IntegratedProject3.Controllers
             return View(revision);
         }
 
+        // Only accessible to the authors
+
         /// <summary>
         /// Displays a list of distributees to be selected
         /// </summary>
@@ -195,6 +211,9 @@ namespace IntegratedProject3.Controllers
                 
             return View(DistributeeList);
         }
+
+        // Only accessible to authors
+
         /// <summary>
         /// Adds a new distributee to the revision
         /// </summary>
@@ -226,8 +245,8 @@ namespace IntegratedProject3.Controllers
                     emailService.massMessageDistribution(revision.Distributees, 1);
 
                     //Texting updated status to distributees
-                    //SMSService smsService = new SMSService();
-                    //smsService.DetermineSMSMessage(revision.Distributees, 1);
+                    SMSService smsService = new SMSService();
+                    smsService.DetermineSMSMessage(revision.Distributees, 1);
                 }
                 else
                 {
@@ -241,6 +260,8 @@ namespace IntegratedProject3.Controllers
             return RedirectToAction("SelectUsers", "Revisions", new { id = revID });
 
         }
+
+        // Only accessible to authors
 
         /// <summary>
         /// Removes a distributee from a revisions distributee list.
@@ -285,6 +306,8 @@ namespace IntegratedProject3.Controllers
 
         }
 
+        // Only accessible to the author of the specific document.
+
         /// <summary>
         /// Allow the user to edit detailed of the specified revision.
         /// </summary>
@@ -323,6 +346,8 @@ namespace IntegratedProject3.Controllers
             return View(revision);
         }
 
+        // Only accessible to the author of the specific document.
+
         /// <summary>
         /// SAves edits made by the user, to the revision, to the database.
         /// </summary>
@@ -358,6 +383,8 @@ namespace IntegratedProject3.Controllers
             return View(revision);
         }
 
+        // Only accessible by the author of the specific document.
+
         /// <summary>
         /// Deletes the selected revision
         /// </summary>
@@ -384,6 +411,8 @@ namespace IntegratedProject3.Controllers
 
             return View(revision);
         }
+
+        //Only accessible by the author of the specfic document.
 
         /// <summary>
         /// Confirms the removal of the selected revision.
@@ -423,8 +452,8 @@ namespace IntegratedProject3.Controllers
                     emailService.massMessageDistribution(revision.Distributees, 2);
 
                     //Texting updated status to distributees
-                    //SMSService smsService = new SMSService();
-                    //smsService.DetermineSMSMessage(revision.Distributees, 2);
+                    SMSService smsService = new SMSService();
+                    smsService.DetermineSMSMessage(revision.Distributees, 2);
 
                     revision.State = DocumentState.Archived;
                     db.Revisions.AddOrUpdate(revision);
@@ -436,6 +465,8 @@ namespace IntegratedProject3.Controllers
             return false;
         }
 
+        // Only accessible to the distributees and author of the specified document.
+
         /// <summary>
         /// Allows the user to dowload the file given
         /// </summary>
@@ -445,15 +476,23 @@ namespace IntegratedProject3.Controllers
         {
             FileStoreService fss = new FileStoreService();
 
+            //gets the file based on the file store key
             var file = fss.GetFile(docKey);
+
+            //finds the document title for the download
             var document = db.Revisions.Where(r => r.fileStoreKey == docKey).SingleOrDefault();
+
+            //Service that allows for the use of dowloading 
             using (var memoryStream = new MemoryStream())
             {
+                //if no a file exists then proceed
                 if (file != null)
                 {
-
+                    //Begin the dowloading procees 
                     file.CopyTo(memoryStream);
                     byte[] fileBytes = memoryStream.ToArray();
+                    // Promts the user to download the file. File types are unknown 
+                    // due to a variety of formats that are supported
                     return File(fileBytes, "application/unknown", document.DocumentTitle);
                 }
                 else

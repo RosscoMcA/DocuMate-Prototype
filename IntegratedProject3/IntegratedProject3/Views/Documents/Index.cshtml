@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IntegratedProject3.Models.Document>
+﻿@model IEnumerable<IntegratedProject3.Models.DocumentViewModel>
 
 @{
     ViewBag.Title = "Documents";
@@ -11,16 +11,32 @@
 </p>
 <table class="table">
     <tr>
-        <th class="th">Document Title</th>
-        <th class="th">Revision Number</th>
-        <th class="th">Creation Date</th>
-        <th class="th">Activation Date</th>
+        <th>@Html.DisplayNameFor(model => model.DocumentTitle)</th>
+        <th>@Html.DisplayNameFor(model => model.RevisionNum)</th>
+        <th>@Html.DisplayNameFor(model => model.DocCreationDate)</th>
+        <th>@Html.DisplayNameFor(model => model.ActivationDate)</th>
+        <th>@Html.DisplayNameFor(model => model.Author.UserName)</th>
+        <th>Actions</th>
 
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RevisionNum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocCreationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActivationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author.UserName)
+        </td>
         <td>            
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
             @Html.ActionLink("Details", "Details", new { id=item.id }) |
@@ -30,4 +46,3 @@
 }
 
 </table>
-

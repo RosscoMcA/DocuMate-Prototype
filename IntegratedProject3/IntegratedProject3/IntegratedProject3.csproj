@@ -231,6 +231,7 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\DocumentViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Revision.cs" />
     <Compile Include="Models\RevisionViewModel.cs" />
