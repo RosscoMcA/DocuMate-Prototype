@@ -6,10 +6,13 @@ using System.Web.Mvc;
 
 namespace IntegratedProject3.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : RootController
     {
         public ActionResult Index()
         {
+            ViewBag.isAdmin = isAdmin();
+            
+            
             return View();
         }
 

@@ -25,6 +25,18 @@
                     <li>@Html.ActionLink("HOME", "Index", "Home")</li>
                     <li>@Html.ActionLink("REVISIONS", "Index", "Revisions")</li>
                     <li>@Html.ActionLink("DOCUMENTS", "Index", "Documents")</li>
+
+
+                    @if(ViewBag.isAdmin != null)
+                    {
+                        if (ViewBag.isAdmin)
+                        {
+                    <li>@Html.ActionLink("ACCOUNTS", "List", "Account")</li>
+
+                        }
+                    }
+
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

@@ -44,7 +44,7 @@
                 @Html.DisplayFor(modelItem => item.type)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }

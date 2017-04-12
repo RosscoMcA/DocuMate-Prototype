@@ -13,7 +13,7 @@
 </div>
 
 <p>
-    @Html.ActionLink("Create New Revision", "Create", "Revisions", new { id = Model.id }, null)
+    @Html.ActionLink("Create New Revision", "Create", "Revisions", new { id = Model.id }, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
@@ -49,9 +49,9 @@
             </td>
             <td>
                 
-                @Html.ActionLink("Edit", "Edit", "Revisions", new { id = item.id }, null) |
-                @Html.ActionLink("Details", "Details", "Revisions", new { id = item.id }, null) |
-                @Html.ActionLink("Delete", "Delete", "Revisions", new { id = item.id }, null)
+                @Html.ActionLink("Edit", "Edit", "Revisions", new { id = item.id }, new { @class = "btn btn-primary" }) |
+                @Html.ActionLink("Details", "Details", "Revisions", new { id = item.id }, new { @class = "btn btn-primary" }) |
+                @Html.ActionLink("Delete", "Delete", "Revisions", new { id = item.id }, new { @class = "btn btn-primary" })
             </td>
         </tr>
     }

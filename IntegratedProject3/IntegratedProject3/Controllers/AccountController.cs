@@ -14,7 +14,7 @@ using System.Data.Entity.Migrations;
 namespace IntegratedProject3.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : RootController
     {
         ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
@@ -60,7 +60,7 @@ namespace IntegratedProject3.Controllers
         /// <returns>A list of all users if an admin is using the system</returns>
         public ActionResult List()
         {
-            //if (this.isAdmin() == false)
+            if (this.isAdmin() == false)
             {
                 return RedirectToAction("Index", "Home");
             }
