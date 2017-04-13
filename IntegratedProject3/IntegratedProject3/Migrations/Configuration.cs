@@ -30,10 +30,11 @@ namespace IntegratedProject3.Migrations
 
                     Account admin1 = new Account
                     {
-                        Email = "nikki.clelland@doc.com",
-                        UserName = "nikki.clelland@doc.com",
+                        Email = "acmeAdmin@acme.com",
+                        UserName = "acmeAdmin@acme.com",
                         FirstName = "Nikki",
                         Surname = "Clelland",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
 
                     };
@@ -44,6 +45,7 @@ namespace IntegratedProject3.Migrations
                         UserName = "james.craig@doc.com",
                         FirstName = "James",
                         Surname = "Craig",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
 
                     };
@@ -54,34 +56,68 @@ namespace IntegratedProject3.Migrations
                         UserName = "ross.mcarthur@doc.com",
                         FirstName = "Nikki",
                         Surname = "Clelland",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
 
                     };
 
                     Account author = new Account
                     {
-                        Email = "kappa@kappa.com",
-                        UserName = "kappa@kappa.com",
-                        FirstName = "Kappa",
-                        Surname = "Kappa",
+                        Email = "john@acme.com",
+                        UserName = "john@acme.com",
+                        FirstName = "John",
+                        Surname = "Johnstone",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
                     };
 
                     Account distributee = new Account
                     {
-                        Email = "distributee@d.com",
-                        UserName = "distributee@d.com",
-                        FirstName = "Distributee",
-                        Surname = "1",
+                        Email = "jcraig203@caledonian.ac.uk",
+                        UserName = "jcraig203@caledonian.ac",
+                        FirstName = "James",
+                        Surname = "Craig",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
                     };
 
                     Account distributee2 = new Account
                     {
-                        Email = "distributee2@d.com",
-                        UserName = "distributee2@d.com",
-                        FirstName = "Distributee",
-                        Surname = "2",
+                        Email = "ral@acme.com",
+                        UserName = "ral@acme.com",
+                        FirstName = "Ramba",
+                        Surname = "Ral",
+                        PhoneNumber = "07507984652",
+                        EmailConfirmed = true
+                    };
+
+                    Account distributee3 = new Account
+                    {
+                        Email = "jackson@acme.com",
+                        UserName = "jackson@acme.com",
+                        FirstName = "Jackson",
+                        Surname = "King",
+                        PhoneNumber = "07507984652",
+                        EmailConfirmed = true
+                    };
+
+                    Account distributee4 = new Account
+                    {
+                        Email = "steve@acme.com",
+                        UserName = "steve@acme.com",
+                        FirstName = "Steve",
+                        Surname = "Smith",
+                        PhoneNumber = "07507984652",
+                        EmailConfirmed = true
+                    };
+
+                    Account distributee5 = new Account
+                    {
+                        Email = "mark@acme.com",
+                        UserName = "mark@acme.com",
+                        FirstName = "Mark",
+                        Surname = "King",
+                        PhoneNumber = "07507984652",
                         EmailConfirmed = true
                     };
 
@@ -95,6 +131,9 @@ namespace IntegratedProject3.Migrations
                     string authorPassword = author.Email;
                     string distributee1Password = distributee.Email;
                     string distributee2Password = distributee2.Email;
+                    string distributee3Password = distributee3.Email;
+                    string distributee4Password = distributee4.Email;
+                    string distributee5Password = distributee5.Email;
 
                     //Creating admins 
                     CreateAdmin(context, admin1, admin1Password);
@@ -107,6 +146,9 @@ namespace IntegratedProject3.Migrations
                     //Creating Distributees
                     CreateDistributee(context, distributee, distributee1Password);
                     CreateDistributee(context, distributee2, distributee2Password);
+                    CreateDistributee(context, distributee3, distributee3Password);
+                    CreateDistributee(context, distributee4, distributee4Password);
+                    CreateDistributee(context, distributee5, distributee5Password);
 
                     //Constructing 
                     Document doc = new Document
@@ -115,27 +157,100 @@ namespace IntegratedProject3.Migrations
                         Author = author
                     };
 
+                    Document doc2 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
+
+                    Document doc3 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
+
+
                     Models.Revision v1 = new Models.Revision
                     {
                         id = Guid.NewGuid().ToString(),
-                        DocumentTitle = "Test Document",
+                        DocumentTitle = "Acme Health and Saftey Guidelines DRAFT.docx",
                         RevisionNum = 1.1,
                         document = doc,
                         State = DocumentState.Archived,
                         DocCreationDate = DateTime.Today.AddDays(-3).Date,
-                        ActivationDate = DateTime.Today.AddDays(-1).Date, 
+                        ActivationDate = DateTime.Today.AddDays(-1).Date,
                         Distributees = new Collection<Account>()
                     };
 
                     Models.Revision v2 = new Models.Revision
                     {
                         id = Guid.NewGuid().ToString(),
-                        DocumentTitle = "New Test Document",
+                        DocumentTitle = "Acme Health and Safety Guidelines FINAL.docx",
                         RevisionNum = 2.1,
                         document = doc,
                         State = DocumentState.Active,
                         DocCreationDate = DateTime.Today.Date,
-                        ActivationDate = DateTime.Today.Date, 
+                        ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
+                    Models.Revision v3 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Devlelopment Guidelines V1",
+                        RevisionNum = 2.1,
+                        document = doc2,
+                        State = DocumentState.Archived,
+                        DocCreationDate = DateTime.Today.Date,
+                        ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
+                    Models.Revision v4 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Development Guidelines V2",
+                        RevisionNum = 2.1,
+                        document = doc2,
+                        State = DocumentState.Active,
+                        DocCreationDate = DateTime.Today.Date,
+                        ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
+                    Models.Revision v5 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 3 DRAFT",
+                        RevisionNum = 2.1,
+                        document = doc3,
+                        State = DocumentState.Archived,
+                        DocCreationDate = DateTime.Today.Date,
+                        ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
+                    Models.Revision v6 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 3",
+                        RevisionNum = 2.1,
+                        document = doc3,
+                        State = DocumentState.Active,
+                        DocCreationDate = DateTime.Today.Date,
+                        ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+
+                    Models.Revision v7 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 3 V2",
+                        RevisionNum = 2.1,
+                        document = doc3,
+                        State = DocumentState.Draft,
+                        DocCreationDate = DateTime.Today.Date,
+                        ActivationDate = DateTime.Today.Date,
                         Distributees = new Collection<Account>()
                     };
 
@@ -145,12 +260,46 @@ namespace IntegratedProject3.Migrations
 
                     v2.Distributees.Add(distributee);
                     v2.Distributees.Add(distributee2);
+                    v2.Distributees.Add(distributee3);
+                    v2.Distributees.Add(distributee4);
+                    v2.Distributees.Add(distributee5);
+
+                    v3.Distributees.Add(distributee);
+                    v3.Distributees.Add(distributee2);
+                    v3.Distributees.Add(distributee3);
+
+                    v4.Distributees.Add(distributee);
+                    v4.Distributees.Add(distributee2);
+                    v4.Distributees.Add(distributee3);
+                    v4.Distributees.Add(distributee5);
+
+                    v5.Distributees.Add(distributee);
+                    v5.Distributees.Add(distributee2);
+                    v5.Distributees.Add(distributee3);
+                    v5.Distributees.Add(distributee4);
+
+                    v6.Distributees.Add(distributee);
+                    v6.Distributees.Add(distributee2);
+                    v6.Distributees.Add(distributee3);
+                    v6.Distributees.Add(distributee4);
+                    v6.Distributees.Add(distributee5);
+
+                    v7.Distributees.Add(distributee);
+                    v7.Distributees.Add(distributee2);
+                    v7.Distributees.Add(distributee3);
+                    v7.Distributees.Add(distributee4);
+                    v7.Distributees.Add(distributee5);
 
                     context.Revisions.Add(v1);
 
                     context.Revisions.Add(v2);
+                    context.Revisions.Add(v3);
+                    context.Revisions.Add(v4);
+                    context.Revisions.Add(v5);
+                    context.Revisions.Add(v6);
+                    context.Revisions.Add(v7);
 
-                                     
+
 
                     context.SaveChanges();
                 }
@@ -235,4 +384,3 @@ namespace IntegratedProject3.Migrations
 
     }
 }
-

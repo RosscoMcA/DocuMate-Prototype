@@ -45,7 +45,7 @@ namespace IntegratedProject3.Controllers
             
             if(isDistributee())
             {
-                var distributeeRevisions = revisions.Where(d => d.id == id);
+                var distributeeRevisions = revisions.Where(r => r.Distributees.Where(d => d.Id == id).Any()).ToList();
                 if (distributeeRevisions != null)
                 {
                     return View(distributeeRevisions);
