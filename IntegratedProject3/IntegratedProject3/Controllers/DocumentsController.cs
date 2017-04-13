@@ -25,47 +25,49 @@ namespace IntegratedProject3.Controllers
 
             if (isAuthor())
             {
-
                 var userId = User.Identity.GetUserId();
-                var doc = db.Documents.Where(d => d.Author.Id == userId).ToList();
-                var docView = new HashSet<DocumentViewModel>();
-                foreach (var singleDoc in doc)
+                var documents = db.Documents.Where(d => d.Author.Id == userId).ToList();
+                return ViewDocuments(documents);
+            }
+
+            if (isAdmin())
+            {
+                var documents = db.Documents.ToList();
+                return ViewDocuments(documents);
+            }
+
+                this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
+            
+        }
+
+        public ActionResult ViewDocuments(List<Document> doc)
+        {
+            
+            var docView = new HashSet<DocumentViewModel>();
+            foreach (var singleDoc in doc)
+            {
+                if (singleDoc.Revisions != null)
                 {
-                    if (singleDoc.Revisions != null)
+                    var revision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Active).SingleOrDefault();
+                    if (revision != null)
                     {
-                        var revision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Active).SingleOrDefault();
-                        if (revision != null)
+                        var newDoc = new DocumentViewModel()
                         {
-                            var newDoc = new DocumentViewModel()
-                            {
-                                id = singleDoc.id,
-                                ActivationDate = revision.ActivationDate.Value,
-                                Author = singleDoc.Author,
-                                DocCreationDate = revision.DocCreationDate,
-                                DocumentTitle = revision.DocumentTitle,
-                                RevisionNum = revision.RevisionNum
-                            };
-                            docView.Add(newDoc);
-                        }
+                            id = singleDoc.id,
+                            ActivationDate = revision.ActivationDate,
+                            Author = singleDoc.Author,
+                            DocCreationDate = revision.DocCreationDate,
+                            DocumentTitle = revision.DocumentTitle,
+                            RevisionNum = revision.RevisionNum
+                        };
+                        docView.Add(newDoc);
                     }
                 }
-                return View(docView.ToList());
-
             }
-            
-            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
-        }
+            return View(docView.ToList());
 
-        /// <summary>
-        /// List of all documents.
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult AdminDocuments()
-        {
-            var documents = db.Documents.ToList();
-            return View(documents);
-        }
+    }
 
         /// <summary>
         /// List of all a document's revisions. Only accessible by an author.
@@ -75,7 +77,7 @@ namespace IntegratedProject3.Controllers
         public ActionResult Details(string id)
         {
             var document = db.Documents.Find(id);
-            if (VerifyAuthor(document))
+            if (VerifyAuthor(document) || isAdmin())
             {
                 if (id == null)
                 {
@@ -91,7 +93,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         
@@ -123,7 +125,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -149,7 +151,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -173,7 +175,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -184,7 +186,7 @@ namespace IntegratedProject3.Controllers
         public ActionResult Delete(string id)
         {
             var document = db.Documents.Find(id);
-            if (VerifyAuthor(document))
+            if (VerifyAuthor(document) || isAdmin())
             {
                 if (id == null)
                 {
@@ -199,7 +201,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -212,7 +214,7 @@ namespace IntegratedProject3.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             var document = db.Documents.Find(id);
-            if (VerifyAuthor(document))
+            if (VerifyAuthor(document) || isAdmin())
             {
                 //New instance of email service.
                 EmailService emailService = new EmailService();
@@ -224,7 +226,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

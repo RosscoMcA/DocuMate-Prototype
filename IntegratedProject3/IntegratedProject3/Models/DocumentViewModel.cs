@@ -23,6 +23,6 @@ namespace IntegratedProject3.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         [Display(Name = "Activation Date")]
-        public DateTime ActivationDate { get; set; }
+        public DateTime? ActivationDate { get; set; }
     }
 }

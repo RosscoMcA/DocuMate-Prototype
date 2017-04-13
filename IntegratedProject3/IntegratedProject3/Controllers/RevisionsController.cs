@@ -36,7 +36,7 @@ namespace IntegratedProject3.Controllers
 
             if(isAuthor())
             {
-                var authorRevisions = db.Revisions.Where(r => r.document.Author.Id == id);
+                var authorRevisions = db.Revisions.Where(r => r.document.Author.Id == id).ToList();
                 if (authorRevisions != null)
                 {
                     return View(authorRevisions);
@@ -58,7 +58,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return View("Index", "Home");
         }
 
         //Accessible by distributees and author associated with the revision.
@@ -136,7 +136,7 @@ namespace IntegratedProject3.Controllers
             }
             
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace IntegratedProject3.Controllers
                         DocCreationDate = DateTime.Now,
                         State = DocumentState.Draft,
                         //Revision activation date/time set the the current date/time.
-                        ActivationDate = DateTime.Now,
+                        ActivationDate = null,
                         //Revision's document set to the document queryed from database.
                         document = doc,
                         //New empty hash of Accounts.
@@ -207,7 +207,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -266,8 +266,8 @@ namespace IntegratedProject3.Controllers
                         emailService.massMessageDistribution(revision.Distributees, 1);
 
                         //Texting updated status to distributees
-                        SMSService smsService = new SMSService();
-                        smsService.DetermineSMSMessage(revision.Distributees, 1);
+                        //SMSService smsService = new SMSService();
+                        //smsService.DetermineSMSMessage(revision.Distributees, 1);
                     }
                     else
                     {
@@ -281,7 +281,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace IntegratedProject3.Controllers
             var revision = db.Revisions.Find(id);
 
             //Verifies the current user is author of document.
-            if (VerifyAuthor(revision))
+            if (VerifyAuthor(revision.document))
             {
 
                 if (id == null)
@@ -356,8 +356,8 @@ namespace IntegratedProject3.Controllers
                 //If the revision is "Active"
                 if (revision.State == DocumentState.Active)
                 {
-                    this.AddNotification("Cannot edit Active documents, please create a new revision.", NotificationType.ERROR);
-                    return RedirectToAction("Index", "Home");
+                    this.AddNotification("This is an active revision. You may only manage the distributees.", NotificationType.INFO);
+                    return RedirectToAction("SelectUsers", new { id = revision.id });
                 }
 
                 //If no revision is found, redirect to Revisions/Index
@@ -377,7 +377,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -390,36 +390,42 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,State,ActivationDate")] Revision revision)
         {
-            var currentRevision = db.Revisions.Where(r => r.id == revision.id).SingleOrDefault();
+            var currentRevision = db.Revisions.Find(revision.id);
 
-            if (VerifyAuthor(revision))
+            //Fuck C#, consistently reset the date to 01/01/0001 when the minimum value it accepts
+            //is 01/01/1753. When the revision is passed in it still resets to 01/01/0001 however,
+            //now it takes the creation date from the current version of the revision and sets it to
+            //the creation date value of the updated revision.
+            revision.DocCreationDate = currentRevision.DocCreationDate;
+            
+            var revisions = db.Revisions.Where(r => r.State == DocumentState.Active).ToList();
+            
+            foreach (var item in revisions)
             {
-                //Fuck C#, consistently reset the date to 01/01/0001 when the minimum value it accepts
-                //is 01/01/1753. When the revision is passed in it still resets to 01/01/0001 however,
-                //now it takes the creation date from the current version of the revision and sets it to
-                //the creation date value of the updated revision.
-                revision.DocCreationDate = currentRevision.DocCreationDate;
-
-                // IF the revision has no activation date and revision has been made "Active".
-                if (revision.ActivationDate == null && revision.State == DocumentState.Active)
+                if (item.State == DocumentState.Active)
                 {
-                    //Activation date is set to current date/time.
-                    revision.ActivationDate = DateTime.Now;
+                    this.AddNotification("There can only be one active revision for a document.", NotificationType.ERROR);
+                    return RedirectToAction("Index", "Documents");
                 }
-
-                // Save changes to revision and redirect to the Revision/Index.
-                if (ModelState.IsValid)
-                {
-                    db.Revisions.AddOrUpdate(revision);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-
-                return View(revision);
+            }
+            
+            // IF the revision has no activation date and revision has been made "Active".
+            if (revision.ActivationDate == null && revision.State == DocumentState.Active)
+            {
+                //Activation date is set to current date/time.
+                revision.ActivationDate = DateTime.Now;
+            }
+            
+            // Save changes to revision and redirect to the Revision/Index.
+            if (ModelState.IsValid)
+            {
+                db.Revisions.AddOrUpdate(revision);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return View(revision);
+
         }
 
         // Only accessible by the author of the specific document.
@@ -436,7 +442,7 @@ namespace IntegratedProject3.Controllers
             var revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
 
             //Verifies the current user is author of document.
-            if (VerifyAuthor(revision))
+            if (VerifyAuthor(revision) || isAdmin())
             {
 
                 if (id == null)
@@ -459,7 +465,7 @@ namespace IntegratedProject3.Controllers
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -475,16 +481,16 @@ namespace IntegratedProject3.Controllers
             // Retrieves the selected revision.
             Revision revision = db.Revisions.Find(id);
 
-            if (VerifyAuthor(revision))
+            if (VerifyAuthor(revision) || isAdmin())
             {
                 // Removes the selected revision from the database.
                 db.Revisions.Remove(revision);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Documents");
             }
 
             this.AddNotification("Sorry! You do not have permisson to access this page!", NotificationType.ERROR);
-            return View("Home", "Index");
+            return RedirectToAction("Index", "Home"); ;
         }
 
         /// <summary>
@@ -509,8 +515,8 @@ namespace IntegratedProject3.Controllers
                     emailService.massMessageDistribution(revision.Distributees, 2);
 
                     //Texting updated status to distributees
-                    SMSService smsService = new SMSService();
-                    smsService.DetermineSMSMessage(revision.Distributees, 2);
+                    //SMSService smsService = new SMSService();
+                    //smsService.DetermineSMSMessage(revision.Distributees, 2);
 
                     revision.State = DocumentState.Archived;
                     db.Revisions.AddOrUpdate(revision);

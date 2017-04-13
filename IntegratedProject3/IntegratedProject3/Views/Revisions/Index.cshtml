@@ -12,6 +12,9 @@
             @Html.DisplayNameFor(model => model.DocumentTitle)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.RevisionNum)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.DocCreationDate)
         </th>
         <th>
@@ -21,14 +24,18 @@
             @Html.DisplayNameFor(model => model.ActivationDate)
         </th>
         <th>
-            Actions
+            @Html.DisplayNameFor(model => model.document.Author.UserName)
         </th>
+        <th>Actions</th>
     </tr>
 
 @foreach (var item in Model ) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.DocumentTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RevisionNum)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DocCreationDate)
@@ -38,6 +45,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ActivationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.document.Author.UserName)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }, new { @class = "btn btn-primary" }) |

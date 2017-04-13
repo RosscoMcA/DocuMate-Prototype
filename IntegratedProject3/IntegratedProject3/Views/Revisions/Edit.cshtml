@@ -32,6 +32,7 @@
             </div>
         </div>
 
+        @Html.ActionLink("Manage Distributees", "SelectUsers", new { id = Model.id })
         @Html.HiddenFor(model => model.document)
 
         <div class="form-group">
