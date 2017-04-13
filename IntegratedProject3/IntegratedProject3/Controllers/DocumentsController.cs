@@ -49,6 +49,7 @@ namespace IntegratedProject3.Controllers
             {
                 if (singleDoc.Revisions != null)
                 {
+                   
                     var revision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Active).SingleOrDefault();
                     if (revision != null)
                     {
@@ -62,6 +63,23 @@ namespace IntegratedProject3.Controllers
                             RevisionNum = revision.RevisionNum
                         };
                         docView.Add(newDoc);
+                    }
+                    else
+                    {
+                        var draftRevision = db.Revisions.Where(r => r.document.id == singleDoc.id && r.State == DocumentState.Draft).SingleOrDefault();
+                        if (draftRevision != null)
+                        {
+                            var newDoc = new DocumentViewModel()
+                            {
+                                id = singleDoc.id,
+                                ActivationDate = draftRevision.ActivationDate,
+                                Author = singleDoc.Author,
+                                DocCreationDate = draftRevision.DocCreationDate,
+                                DocumentTitle = draftRevision.DocumentTitle,
+                                RevisionNum = draftRevision.RevisionNum
+                            };
+                            docView.Add(newDoc);
+                        }
                     }
                 }
             }

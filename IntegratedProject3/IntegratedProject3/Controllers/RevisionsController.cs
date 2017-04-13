@@ -162,9 +162,10 @@ namespace IntegratedProject3.Controllers
                     var latestRevision = db.Revisions.Where(r => r.document.id == doc.id && r.State == DocumentState.Active).SingleOrDefault();
                     var distributees = new HashSet<Account>();
 
-                    if (latestRevision != null)
+                    if (distributees.Count > 0)
                     {
                         distributees = (HashSet<Account>)latestRevision.Distributees;
+                        
                     }
 
                     // Files is looking for the corresponding ID in the view
@@ -192,7 +193,7 @@ namespace IntegratedProject3.Controllers
                         //Revision's document set to the document queryed from database.
                         document = doc,
                         //New empty hash of Accounts.
-                        Distributees = distributees,
+                        Distributees = distributees.ToList(),
                         fileStoreKey = revision.FileStoreKey
 
                     };
@@ -404,8 +405,7 @@ namespace IntegratedProject3.Controllers
             {
                 if (item.State == DocumentState.Active)
                 {
-                    this.AddNotification("There can only be one active revision for a document.", NotificationType.ERROR);
-                    return RedirectToAction("Index", "Documents");
+                    item.State = DocumentState.Archived;
                 }
             }
             
