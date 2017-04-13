@@ -27,7 +27,7 @@ namespace IntegratedProject3.Models
         /// <summary>
         /// Reference of the document class - Document that this version is applicable to.
         /// </summary>
-        [Key]
+        
         public virtual Document document { get; set; }
 
         /// <summary>

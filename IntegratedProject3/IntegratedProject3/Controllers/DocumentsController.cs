@@ -219,7 +219,17 @@ namespace IntegratedProject3.Controllers
                 //New instance of email service.
                 EmailService emailService = new EmailService();
                 //Removes the document from the database.
-                db.Documents.Remove(document);
+                var revisions = document.Revisions.ToList();
+               
+
+                foreach (var rev in revisions)
+                {
+                    rev.Distributees =null;
+                    rev.document = null;
+                    db.Revisions.Remove(rev);
+                    
+                }
+                
                 db.SaveChanges();
                 //Redirects to Document/Index
                 return RedirectToAction("Index");

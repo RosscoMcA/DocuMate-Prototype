@@ -266,8 +266,8 @@ namespace IntegratedProject3.Controllers
                         emailService.massMessageDistribution(revision.Distributees, 1);
 
                         //Texting updated status to distributees
-                        //SMSService smsService = new SMSService();
-                        //smsService.DetermineSMSMessage(revision.Distributees, 1);
+                        SMSService smsService = new SMSService();
+                        smsService.DetermineSMSMessage(revision.Distributees, 1);
                     }
                     else
                     {
