@@ -399,7 +399,7 @@ namespace IntegratedProject3.Controllers
             //the creation date value of the updated revision.
             revision.DocCreationDate = currentRevision.DocCreationDate;
             
-            var revisions = db.Revisions.Where(r => r.State == DocumentState.Active).ToList();
+            var revisions = db.Revisions.Where(r => r.State == DocumentState.Active && r.document.id == currentRevision.document.id).ToList();
             
             foreach (var item in revisions)
             {
