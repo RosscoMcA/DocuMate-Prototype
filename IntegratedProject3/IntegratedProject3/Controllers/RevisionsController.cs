@@ -398,6 +398,7 @@ namespace IntegratedProject3.Controllers
             //now it takes the creation date from the current version of the revision and sets it to
             //the creation date value of the updated revision.
             revision.DocCreationDate = currentRevision.DocCreationDate;
+            revision.fileStoreKey = currentRevision.fileStoreKey;
             
             var revisions = db.Revisions.Where(r => r.State == DocumentState.Active && r.document.id == currentRevision.document.id).ToList();
             
