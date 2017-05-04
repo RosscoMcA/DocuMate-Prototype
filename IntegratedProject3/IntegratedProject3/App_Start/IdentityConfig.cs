@@ -18,7 +18,7 @@ using SendGrid;
 using System.Net;
 using System.Configuration;
 using Twilio;
-
+using SendGrid.Helpers.Mail;
 
 namespace IntegratedProject3
 {
@@ -45,31 +45,27 @@ namespace IntegratedProject3
         /// <returns>The Status of the email sent</returns>
         public Task configSendGridAsync(IdentityMessage message)
         {
-            var myMessage = new SendGridMessage();
-            myMessage.AddTo(message.Destination);
-            myMessage.From = new MailAddress(
-                                "DocumentManagement@Doc.com", "Document Management Team");
-            myMessage.Subject = message.Subject;
-            myMessage.Text = message.Body;
-            myMessage.Html = message.Body;
-
             var credentials = new NetworkCredential(
-                       ConfigurationManager.AppSettings["mailAccount"],
-                       ConfigurationManager.AppSettings["mailPassword"]
-                       );
-
-            // Create a Web transport for sending email.
-            var transportWeb = new Web(credentials);
-
-            // Send the email.
-            if (transportWeb != null)
+                        ConfigurationManager.AppSettings["mailAccount"],
+                        ConfigurationManager.AppSettings["mailPassword"]
+                        );
+            var client = new SendGridClient("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");
+            var SGMessage = new SendGrid.Helpers.Mail.SendGridMessage()
             {
-                return transportWeb.DeliverAsync(myMessage);
-            }
-            else
-            {
-                return Task.FromResult(0);
-            }
+                From = new EmailAddress(
+                                "DocuMate@DocuMate.com", "DocuMate Team"),
+                Subject = message.Subject,
+                PlainTextContent = message.Body,
+                HtmlContent = message.Body
+
+            };
+            SGMessage.AddTo(new EmailAddress(message.Destination));
+
+            var response = client.SendEmailAsync(SGMessage);
+
+
+            return response;
+
         }
     }
    
