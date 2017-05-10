@@ -45,11 +45,8 @@ namespace IntegratedProject3
         /// <returns>The Status of the email sent</returns>
         public Task configSendGridAsync(IdentityMessage message)
         {
-            var credentials = new NetworkCredential(
-                        ConfigurationManager.AppSettings["mailAccount"],
-                        ConfigurationManager.AppSettings["mailPassword"]
-                        );
-            var client = new SendGridClient("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");
+            
+            var client = new SendGridClient("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");
             var SGMessage = new SendGrid.Helpers.Mail.SendGridMessage()
             {
                 From = new EmailAddress(
