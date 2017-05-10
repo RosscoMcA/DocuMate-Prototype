@@ -57,7 +57,7 @@ namespace IntegratedProject3.Controllers
         /// </summary>
         /// <param name="key">The File Key</param>
         /// <returns>The Stream of the file stored. </returns>
-        public Stream GetFile(string key)
+        public GetObjectResponse GetFile(string key)
         {
             using (var client = new AmazonS3Client(Amazon.RegionEndpoint.EUWest1))
             {
@@ -69,7 +69,8 @@ namespace IntegratedProject3.Controllers
 
                 var response = client.GetObject(request);
 
-                return response.ResponseStream;
+            
+                return response;
             }
         }
 

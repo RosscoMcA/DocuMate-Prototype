@@ -540,7 +540,9 @@ namespace IntegratedProject3.Controllers
             FileStoreService fss = new FileStoreService();
 
             //gets the file based on the file store key
-            var file = fss.GetFile(docKey);
+            var file = fss.GetFile(docKey).ResponseStream;
+
+            var fileType = fss.GetFile(docKey).Headers.ContentType;
 
             //finds the document title for the download
             var document = db.Revisions.Where(r => r.fileStoreKey == docKey).SingleOrDefault();
@@ -554,9 +556,12 @@ namespace IntegratedProject3.Controllers
                     //Begin the dowloading procees 
                     file.CopyTo(memoryStream);
                     byte[] fileBytes = memoryStream.ToArray();
+
+                    
+                    
                     // Promts the user to download the file. File types are unknown 
                     // due to a variety of formats that are supported
-                    return File(fileBytes, "application/unknown", document.DocumentTitle);
+                    return File(fileBytes,fileType, document.DocumentTitle);
                 }
                 else
                 {
