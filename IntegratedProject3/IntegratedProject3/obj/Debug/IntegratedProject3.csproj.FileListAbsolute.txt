@@ -340,7 +340,6 @@ C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\Microsoft.Id
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\RestSharp.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.SmtpApi.dll
-C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGridMail.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\System.Net.Http.Formatting.dll
 C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\Twilio.Api.dll
@@ -356,3 +355,6 @@ C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\Twilio.Api.x
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.pdb
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.xml
 C:\Users\Ross\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.SmtpApi.pdb
+C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.pdb
+C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.xml
+C:\Users\Nikki\ip3project\IntegratedProject3\IntegratedProject3\bin\SendGrid.SmtpApi.pdb

@@ -60,6 +60,9 @@ namespace IntegratedProject3.Controllers
         /// <returns>A list of all users if an admin is using the system</returns>
         public ActionResult List()
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             if (this.isAdmin() == false)
             {
                 return RedirectToAction("Index", "Home");
@@ -74,6 +77,8 @@ namespace IntegratedProject3.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -84,6 +89,8 @@ namespace IntegratedProject3.Controllers
         /// <returns>The View the the users current Details</returns>
         public ActionResult Edit(string id)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             var user = db.Accounts.Where(u => u.Id.Equals(id)).SingleOrDefault();
 
             if (user != null)
@@ -150,6 +157,8 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -221,6 +230,8 @@ namespace IntegratedProject3.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             return View();
         }
 

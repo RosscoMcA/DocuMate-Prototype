@@ -6,9 +6,16 @@
 
 <h2>Documents</h2>
 
-<p>
-    <a href="/Documents/Create" class="btn btn-primary btn-lg">Create New Document</a>
-</p>
+    @if (ViewBag.isAuthor != null)
+    {
+        if (ViewBag.isAuthor)
+        { 
+            <p>
+              @Html.ActionLink("Create New Document", "Create", "Documents", null, new { @class = "btn  btn-primary btn-lg" })
+            </p>    
+        }
+    }
+
 <table class="table">
     <tr>
         <th>@Html.DisplayNameFor(model => model.DocumentTitle)</th>

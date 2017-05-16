@@ -26,6 +26,10 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Index()
         {
+
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             var id = User.Identity.GetUserId();
             var revisions = db.Revisions;
 
@@ -71,6 +75,9 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Details(string id)
         {
+
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -97,8 +104,9 @@ namespace IntegratedProject3.Controllers
         [Authorize]
         public ActionResult Create(string id)
       {
-
-            if(isAuthor())
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+            if (isAuthor())
             {
 
                 if(id == null)
@@ -150,7 +158,8 @@ namespace IntegratedProject3.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "DocID, RevisionNum, DocumentTitle, Distributees, File")] RevisionViewModel revision)
         {
-
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             if (isAuthor())
             {
 
@@ -219,6 +228,8 @@ namespace IntegratedProject3.Controllers
         /// <returns></returns>
         public ActionResult SelectUsers(string id)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             if (isAuthor())
             {
                 var DistributeeList = new DistributeeSelectModel();
@@ -242,7 +253,8 @@ namespace IntegratedProject3.Controllers
         /// <returns></returns>
         public ActionResult AddNewDistributee(string userKey, string revID)
         {
-             if (isAuthor())
+
+            if (isAuthor())
             {
                 //Finds selected revision
                 var revision = db.Revisions.Where(r => r.id == revID).SingleOrDefault();
@@ -342,6 +354,8 @@ namespace IntegratedProject3.Controllers
         /// <returns></returns>
         public ActionResult Edit(string id)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             //Retrieves the selected revision.
             var revision = db.Revisions.Find(id);
 
@@ -391,6 +405,7 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,RevisionNum,DocumentTitle,State,ActivationDate")] Revision revision)
         {
+
             var currentRevision = db.Revisions.Find(revision.id);
 
             //Fuck C#, consistently reset the date to 01/01/0001 when the minimum value it accepts
@@ -439,6 +454,8 @@ namespace IntegratedProject3.Controllers
         /// <returns></returns>
         public ActionResult Delete(string id)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             //Retrieves the selected revision.
             var revision = db.Revisions.Where(r => r.id == id).SingleOrDefault();
 
@@ -502,7 +519,8 @@ namespace IntegratedProject3.Controllers
         /// <returns>True if success</returns>
         public bool ArchiveUserRevisions(string id)
         {
-
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
             //Retrieves revisions of author
             var authorRevisions = db.Revisions.Where(r => r.document.Author.Id == id);
             

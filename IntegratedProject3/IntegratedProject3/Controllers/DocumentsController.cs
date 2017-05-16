@@ -22,6 +22,8 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of all documents</returns>
         public ActionResult Index()
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
 
             if (isAuthor())
             {
@@ -94,6 +96,10 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of a specific document's revisions</returns>
         public ActionResult Details(string id)
         {
+
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             var document = db.Documents.Find(id);
             if (VerifyAuthor(document) || isAdmin())
             {
@@ -123,6 +129,9 @@ namespace IntegratedProject3.Controllers
         
         public ActionResult Create([Bind(Include = "id")] Document document)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             if (isAuthor())
             {
 
@@ -153,6 +162,10 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of Document/Edit</returns>
         public ActionResult Edit(string id)
         {
+
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             var document = db.Documents.Find(id);
             if (VerifyAuthor(document))
             {
@@ -181,6 +194,9 @@ namespace IntegratedProject3.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id")] Document document)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             if (VerifyAuthor(document))
             {
                 if (ModelState.IsValid)
@@ -203,6 +219,9 @@ namespace IntegratedProject3.Controllers
         /// <returns>View of Document Delete</returns>
         public ActionResult Delete(string id)
         {
+            ViewBag.isAuthor = isAuthor();
+            ViewBag.isAdmin = isAdmin();
+
             var document = db.Documents.Find(id);
             if (VerifyAuthor(document) || isAdmin())
             {

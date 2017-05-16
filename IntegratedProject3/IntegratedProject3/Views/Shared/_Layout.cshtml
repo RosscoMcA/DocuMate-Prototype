@@ -17,25 +17,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink(
-               "TEXT", "Index", "Home",null,new {@class="navbar-image"})
+                @Html.ActionLink("TEXT", "Index", "Home",null,new {@class="navbar-image"})
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("HOME", "Index", "Home")</li>
                     <li>@Html.ActionLink("REVISIONS", "Index", "Revisions")</li>
-                    <li>@Html.ActionLink("DOCUMENTS", "Index", "Documents")</li>
 
-
-                    @if(ViewBag.isAdmin != null)
+                    @if (ViewBag.isAuthor != null && ViewBag.isAdmin != null)
                     {
+                        if (ViewBag.isAuthor || ViewBag.isAdmin)
+                        {
+                            <li>@Html.ActionLink("DOCUMENTS", "Index", "Documents")</li>
+                        }
+
                         if (ViewBag.isAdmin)
                         {
-                    <li>@Html.ActionLink("ACCOUNTS", "List", "Account")</li>
-
+                            <li>@Html.ActionLink("ACCOUNTS", "List", "Account")</li>
                         }
                     }
-
 
                 </ul>
                 @Html.Partial("_LoginPartial")

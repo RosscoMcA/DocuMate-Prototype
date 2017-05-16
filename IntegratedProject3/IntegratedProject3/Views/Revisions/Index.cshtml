@@ -48,12 +48,28 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.document.Author.UserName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }, new { @class = "btn btn-primary" }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }, new { @class = "btn btn-primary" }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id }, new { @class = "btn btn-primary" })
-        </td>
+        </td>           
+            
+            @if (ViewBag.isAuthor != null)
+            {
+                if ((ViewBag.isAuthor))
+                {
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.id }, new { @class = "btn btn-primary" }) |
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }, new { @class = "btn btn-primary" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-primary" })
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.id }, new { @class = "btn btn-primary" })
+                    </td>
+                }
+            }
+            
+
+
     </tr>
 }
 

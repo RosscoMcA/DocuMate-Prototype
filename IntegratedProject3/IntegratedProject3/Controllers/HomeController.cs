@@ -10,8 +10,9 @@ namespace IntegratedProject3.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.isAuthor = isAuthor();
             ViewBag.isAdmin = isAdmin();
-            
+           
             
             return View();
         }
