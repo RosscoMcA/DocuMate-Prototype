@@ -168,6 +168,30 @@ namespace IntegratedProject3.Migrations
                         id = Guid.NewGuid().ToString(),
                         Author = author
                     };
+					
+					Document doc4 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
+					
+					Document doc5 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
+					
+					Document doc6 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
+					
+					Document doc7 = new Document
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Author = author
+                    };
 
 
                     Models.Revision v1 = new Models.Revision
@@ -198,7 +222,7 @@ namespace IntegratedProject3.Migrations
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Acme Devlelopment Guidelines V1",
-                        RevisionNum = 2.1,
+                        RevisionNum = 1.1,
                         document = doc2,
                         State = DocumentState.Archived,
                         DocCreationDate = DateTime.Today.Date,
@@ -222,7 +246,7 @@ namespace IntegratedProject3.Migrations
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Acme Document 3 DRAFT",
-                        RevisionNum = 2.1,
+                        RevisionNum = 1.1,
                         document = doc3,
                         State = DocumentState.Archived,
                         DocCreationDate = DateTime.Today.Date,
@@ -246,11 +270,59 @@ namespace IntegratedProject3.Migrations
                     {
                         id = Guid.NewGuid().ToString(),
                         DocumentTitle = "Acme Document 3 V2",
-                        RevisionNum = 2.1,
+                        RevisionNum = 3.1,
                         document = doc3,
                         State = DocumentState.Draft,
                         DocCreationDate = DateTime.Today.Date,
                         ActivationDate = DateTime.Today.Date,
+                        Distributees = new Collection<Account>()
+                    };
+					
+					Models.Revision v8 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 4",
+                        RevisionNum = 1.1,
+                        document = doc4,
+                        State = DocumentState.Draft,
+                        DocCreationDate = DateTime.Today.AddDays(-3).Date,
+                        ActivationDate = DateTime.Today.AddDays(-1).Date,
+                        Distributees = new Collection<Account>()
+                    };
+					
+					Models.Revision v9 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 5 (Archived)",
+                        RevisionNum = 1.1,
+                        document = doc5,
+                        State = DocumentState.Archived,
+                        DocCreationDate = DateTime.Today.AddDays(-3).Date,
+                        ActivationDate = DateTime.Today.AddDays(-1).Date,
+                        Distributees = new Collection<Account>()
+                    };
+					
+					Models.Revision v10 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 6",
+                        RevisionNum = 1.1,
+                        document = doc6,
+                        State = DocumentState.Active,
+                        DocCreationDate = DateTime.Today.AddDays(-3).Date,
+                        ActivationDate = DateTime.Today.AddDays(-1).Date,
+                        Distributees = new Collection<Account>()
+                    };
+					
+					Models.Revision v11 = new Models.Revision
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        DocumentTitle = "Acme Document 7",
+                        RevisionNum = 1.1,
+                        document = doc7,
+                        State = DocumentState.Active,
+                        DocCreationDate = DateTime.Today.AddDays(-3).Date,
+                        ActivationDate = DateTime.Today.AddDays(-1).Date,
                         Distributees = new Collection<Account>()
                     };
 
@@ -289,16 +361,42 @@ namespace IntegratedProject3.Migrations
                     v7.Distributees.Add(distributee3);
                     v7.Distributees.Add(distributee4);
                     v7.Distributees.Add(distributee5);
+					
+					v8.Distributees.Add(distributee);
+                    v8.Distributees.Add(distributee2);
+                    v8.Distributees.Add(distributee3);
+                    v8.Distributees.Add(distributee4);
+                    v8.Distributees.Add(distributee5);
+					
+					v9.Distributees.Add(distributee);
+                    v9.Distributees.Add(distributee2);
+                    v9.Distributees.Add(distributee3);
+                    v9.Distributees.Add(distributee4);
+                    v9.Distributees.Add(distributee5);
+					
+					v10.Distributees.Add(distributee);
+                    v10.Distributees.Add(distributee2);
+                    v10.Distributees.Add(distributee3);
+                    v10.Distributees.Add(distributee4);
+                    v10.Distributees.Add(distributee5);
+					
+					v11.Distributees.Add(distributee);
+                    v11.Distributees.Add(distributee2);
+                    v11.Distributees.Add(distributee3);
+                    v11.Distributees.Add(distributee4);
+                    v11.Distributees.Add(distributee5);
 
                     context.Revisions.Add(v1);
-
                     context.Revisions.Add(v2);
                     context.Revisions.Add(v3);
                     context.Revisions.Add(v4);
                     context.Revisions.Add(v5);
                     context.Revisions.Add(v6);
                     context.Revisions.Add(v7);
-
+                    context.Revisions.Add(v8);
+                    context.Revisions.Add(v9);
+                    context.Revisions.Add(v10);
+                    context.Revisions.Add(v11);
 
 
                     context.SaveChanges();
